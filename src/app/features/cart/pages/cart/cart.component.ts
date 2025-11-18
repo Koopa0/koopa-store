@@ -13,7 +13,8 @@
  * 5. 錯誤處理
  */
 
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
@@ -64,6 +65,7 @@ export class CartComponent implements OnInit {
    */
   private readonly router = inject(Router);
   public readonly cartService = inject(CartService);
+  private readonly destroyRef = inject(DestroyRef);
 
   /**
    * 從 CartService 取得的狀態
@@ -93,14 +95,17 @@ export class CartComponent implements OnInit {
   increaseQuantity(item: CartItemDetail): void {
     const newQuantity = item.quantity + 1;
     if (newQuantity <= item.stockQuantity) {
-      this.cartService.updateQuantity(item.id, newQuantity).subscribe({
-        next: () => {
-          console.log('Quantity updated');
-        },
-        error: (err) => {
-          console.error('Failed to update quantity:', err);
-        },
-      });
+      this.cartService
+        .updateQuantity(item.id, newQuantity)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            console.log('Quantity updated');
+          },
+          error: (err) => {
+            console.error('Failed to update quantity:', err);
+          },
+        });
     }
   }
 
@@ -111,14 +116,17 @@ export class CartComponent implements OnInit {
   decreaseQuantity(item: CartItemDetail): void {
     const newQuantity = item.quantity - 1;
     if (newQuantity >= 1) {
-      this.cartService.updateQuantity(item.id, newQuantity).subscribe({
-        next: () => {
-          console.log('Quantity updated');
-        },
-        error: (err) => {
-          console.error('Failed to update quantity:', err);
-        },
-      });
+      this.cartService
+        .updateQuantity(item.id, newQuantity)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            console.log('Quantity updated');
+          },
+          error: (err) => {
+            console.error('Failed to update quantity:', err);
+          },
+        });
     }
   }
 
@@ -131,10 +139,13 @@ export class CartComponent implements OnInit {
     const newQuantity = parseInt(input.value, 10);
 
     if (newQuantity >= 1 && newQuantity <= item.stockQuantity) {
-      this.cartService.updateQuantity(item.id, newQuantity).subscribe({
-        next: () => {
-          console.log('Quantity updated');
-        },
+      this.cartService
+        .updateQuantity(item.id, newQuantity)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            console.log('Quantity updated');
+          },
         error: (err) => {
           console.error('Failed to update quantity:', err);
           // 恢復原始值
@@ -153,14 +164,17 @@ export class CartComponent implements OnInit {
    */
   removeItem(item: CartItemDetail): void {
     if (confirm(`確定要移除「${item.productName}」嗎？`)) {
-      this.cartService.removeItem(item.id).subscribe({
-        next: () => {
-          console.log('Item removed');
-        },
-        error: (err) => {
-          console.error('Failed to remove item:', err);
-        },
-      });
+      this.cartService
+        .removeItem(item.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            console.log('Item removed');
+          },
+          error: (err) => {
+            console.error('Failed to remove item:', err);
+          },
+        });
     }
   }
 
@@ -170,14 +184,17 @@ export class CartComponent implements OnInit {
    */
   clearCart(): void {
     if (confirm('確定要清空購物車嗎？')) {
-      this.cartService.clearCart().subscribe({
-        next: () => {
-          console.log('Cart cleared');
-        },
-        error: (err) => {
-          console.error('Failed to clear cart:', err);
-        },
-      });
+      this.cartService
+        .clearCart()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            console.log('Cart cleared');
+          },
+          error: (err) => {
+            console.error('Failed to clear cart:', err);
+          },
+        });
     }
   }
 

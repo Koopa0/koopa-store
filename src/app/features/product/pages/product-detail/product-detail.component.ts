@@ -13,7 +13,8 @@
  * 5. 錯誤處理 (Error handling)
  */
 
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
@@ -71,6 +72,7 @@ export class ProductDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly productService = inject(ProductService);
   private readonly cartService = inject(CartService);
+  private readonly destroyRef = inject(DestroyRef);
 
   /**
    * 狀態 Signals
@@ -145,17 +147,20 @@ export class ProductDetailComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    this.productService.getProduct(id).subscribe({
-      next: (product) => {
-        this.product.set(product);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error('Failed to load product:', err);
-        this.error.set('Failed to load product. Please try again.');
-        this.loading.set(false);
-      },
-    });
+    this.productService
+      .getProduct(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (product) => {
+          this.product.set(product);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error('Failed to load product:', err);
+          this.error.set('Failed to load product. Please try again.');
+          this.loading.set(false);
+        },
+      });
   }
 
   /**
@@ -190,16 +195,19 @@ export class ProductDetailComponent implements OnInit {
     const quantity = this.quantityControl.value || 1;
 
     if (prod) {
-      this.cartService.addToCart(prod, quantity).subscribe({
-        next: () => {
-          console.log('Added to cart successfully');
-          // TODO: 顯示成功訊息
-        },
-        error: (err) => {
-          console.error('Failed to add to cart:', err);
-          // TODO: 顯示錯誤訊息
-        },
-      });
+      this.cartService
+        .addToCart(prod, quantity)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            console.log('Added to cart successfully');
+            // TODO: 顯示成功訊息
+          },
+          error: (err) => {
+            console.error('Failed to add to cart:', err);
+            // TODO: 顯示錯誤訊息
+          },
+        });
     }
   }
 
@@ -213,16 +221,19 @@ export class ProductDetailComponent implements OnInit {
 
     if (prod) {
       // 先加入購物車，然後導航到結帳頁面
-      this.cartService.addToCart(prod, quantity).subscribe({
-        next: () => {
-          // TODO: 導航到結帳頁面
-          this.router.navigate(['/cart']);
-        },
-        error: (err) => {
-          console.error('Failed to add to cart:', err);
-          // TODO: 顯示錯誤訊息
-        },
-      });
+      this.cartService
+        .addToCart(prod, quantity)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            // TODO: 導航到結帳頁面
+            this.router.navigate(['/cart']);
+          },
+          error: (err) => {
+            console.error('Failed to add to cart:', err);
+            // TODO: 顯示錯誤訊息
+          },
+        });
     }
   }
 

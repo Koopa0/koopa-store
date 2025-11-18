@@ -13,7 +13,8 @@
  * 5. 響應式列表設計
  */
 
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 
@@ -60,6 +61,7 @@ import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
 export class OrderListComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly orderService = inject(OrderService);
+  private readonly destroyRef = inject(DestroyRef);
 
   /**
    * 訂單列表 Signal
@@ -120,22 +122,25 @@ export class OrderListComponent implements OnInit {
     // TODO: 實際應從 AuthService 取得用戶 ID
     const userId = 'mock-user-id';
 
-    this.orderService.getUserOrders(userId, page, this.pagination().pageSize).subscribe({
-      next: (response) => {
-        this.orders.set(response.items);
-        this.pagination.set({
-          currentPage: response.currentPage,
-          pageSize: response.pageSize,
-          totalItems: response.totalItems,
-          totalPages: response.totalPages,
-        });
-        this.loading.set(false);
-      },
-      error: (error) => {
-        this.error.set('載入訂單失敗: ' + error.message);
-        this.loading.set(false);
-      },
-    });
+    this.orderService
+      .getUserOrders(userId, page, this.pagination().pageSize)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.orders.set(response.items);
+          this.pagination.set({
+            currentPage: response.currentPage,
+            pageSize: response.pageSize,
+            totalItems: response.totalItems,
+            totalPages: response.totalPages,
+          });
+          this.loading.set(false);
+        },
+        error: (error) => {
+          this.error.set('載入訂單失敗: ' + error.message);
+          this.loading.set(false);
+        },
+      });
   }
 
   /**
