@@ -1,0 +1,209 @@
+<!--
+  商品列表頁面
+  Product List Page
+
+  教學重點 / Teaching Points:
+  1. Material Grid 佈局
+  2. 響應式設計
+  3. 商品卡片設計
+  4. 搜尋和篩選 UI
+  5. 分頁元件
+-->
+
+<div class="product-list-page">
+  <!-- 頁面標題和搜尋列 Page Header and Search Bar -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">{{ 'product.list.title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'product.list.subtitle' | translate }}</p>
+    </div>
+
+    <!-- 搜尋和篩選工具列 Search and Filter Toolbar -->
+    <div class="toolbar">
+      <!-- 搜尋框 Search Input -->
+      <mat-form-field class="search-field" appearance="outline">
+        <mat-label>{{ 'product.list.search' | translate }}</mat-label>
+        <input
+          matInput
+          [formControl]="searchControl"
+          [placeholder]="'product.list.searchPlaceholder' | translate"
+        />
+        <mat-icon matPrefix>search</mat-icon>
+        @if (searchControl.value) {
+          <button
+            matSuffix
+            mat-icon-button
+            (click)="searchControl.setValue('')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <!-- 排序選擇 Sort Select -->
+      <mat-form-field class="sort-field" appearance="outline">
+        <mat-label>{{ 'product.list.sortBy' | translate }}</mat-label>
+        <mat-select [formControl]="sortControl">
+          @for (option of sortOptions; track option.value) {
+            <mat-option [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- 排序方向按鈕 Sort Order Button -->
+      <button
+        mat-icon-button
+        class="sort-order-btn"
+        (click)="toggleSortOrder()"
+        [matTooltip]="
+          sortOrderControl.value === 'asc'
+            ? ('product.list.ascending' | translate)
+            : ('product.list.descending' | translate)
+        "
+      >
+        <mat-icon>
+          {{ sortOrderControl.value === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- 載入動畫 Loading Spinner -->
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="60"></mat-spinner>
+      <p class="loading-text">{{ 'common.loading' | translate }}</p>
+    </div>
+  }
+
+  <!-- 商品網格 Product Grid -->
+  @if (!loading()) {
+    @if (products().length > 0) {
+      <div class="product-grid">
+        @for (product of products(); track product.id) {
+          <mat-card class="product-card">
+            <!-- 商品圖片 Product Image -->
+            <div class="product-image-container">
+              <img
+                mat-card-image
+                [src]="product.primaryImageUrl"
+                [alt]="product.name"
+                class="product-image"
+              />
+
+              <!-- 折扣標籤 Discount Badge -->
+              @if (hasDiscount(product)) {
+                <div class="discount-badge">
+                  -{{ getDiscountPercentage(product) }}%
+                </div>
+              }
+
+              <!-- 精選標籤 Featured Badge -->
+              @if (product.isFeatured) {
+                <mat-chip class="featured-chip">
+                  <mat-icon>star</mat-icon>
+                  {{ 'product.featured' | translate }}
+                </mat-chip>
+              }
+
+              <!-- 快速查看按鈕 Quick View Button -->
+              <div class="product-overlay">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  [routerLink]="['/products', product.id]"
+                >
+                  <mat-icon>visibility</mat-icon>
+                  {{ 'product.viewDetails' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <!-- 商品資訊 Product Info -->
+            <mat-card-content class="product-info">
+              <!-- 分類 Category -->
+              <div class="product-category">
+                {{ product.categoryName }}
+              </div>
+
+              <!-- 商品名稱 Product Name -->
+              <h3 class="product-name" [routerLink]="['/products', product.id]">
+                {{ product.name }}
+              </h3>
+
+              <!-- 簡短描述 Short Description -->
+              <p class="product-description">
+                {{ product.summary | truncate:80 }}
+              </p>
+
+              <!-- 評分和銷量 Rating and Sales -->
+              <div class="product-meta">
+                <div class="rating">
+                  <mat-icon class="star-icon">star</mat-icon>
+                  <span class="rating-value">{{ product.ratingAverage }}</span>
+                  <span class="review-count">({{ product.reviewCount }})</span>
+                </div>
+                <div class="sold-count">
+                  {{ 'product.sold' | translate }}: {{ product.totalSold }}
+                </div>
+              </div>
+
+              <!-- 價格和購買 Price and Actions -->
+              <div class="product-footer">
+                <div class="price-container">
+                  @if (hasDiscount(product)) {
+                    <span class="compare-price">
+                      {{ product.comparePrice | currencyFormat:'TWD':'symbol' }}
+                    </span>
+                  }
+                  <span class="current-price">
+                    {{ product.price | currencyFormat:'TWD':'symbol' }}
+                  </span>
+                </div>
+
+                <button
+                  mat-raised-button
+                  color="primary"
+                  class="add-to-cart-btn"
+                >
+                  <mat-icon>shopping_cart</mat-icon>
+                  {{ 'product.addToCart' | translate }}
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+
+      <!-- 分頁器 Paginator -->
+      <mat-paginator
+        class="product-paginator"
+        [length]="pagination().total"
+        [pageSize]="pagination().limit"
+        [pageIndex]="pagination().page - 1"
+        [pageSizeOptions]="[12, 24, 48]"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    } @else {
+      <!-- 空狀態 Empty State -->
+      <div class="empty-state">
+        <mat-icon class="empty-icon">inventory_2</mat-icon>
+        <h2>{{ 'product.list.noProducts' | translate }}</h2>
+        <p>{{ 'product.list.noProductsDesc' | translate }}</p>
+        @if (searchControl.value) {
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="searchControl.setValue('')"
+          >
+            {{ 'product.list.clearSearch' | translate }}
+          </button>
+        }
+      </div>
+    }
+  }
+</div>

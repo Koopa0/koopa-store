@@ -17,10 +17,12 @@ import {
   provideZoneChangeDetection,
   importProvidersFrom,
 } from '@angular/core';
+import { DatePipe, CurrencyPipe } from '@angular/common';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import {
   provideHttpClient,
   withInterceptorsFromDi,
+  withInterceptors,
   HttpClient,
 } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -30,6 +32,13 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 
 import { routes } from './app.routes';
+
+// HTTP Interceptors
+import {
+  authInterceptor,
+  errorInterceptor,
+  loadingInterceptor,
+} from '@core/interceptors';
 
 /**
  * 自定義翻譯加載器
@@ -88,9 +97,19 @@ export const appConfig: ApplicationConfig = {
      * HTTP Client 配置
      * HTTP Client configuration
      *
-     * withInterceptorsFromDi: 支援從 DI 注入攔截器
+     * 教學說明：
+     * - withInterceptors: 提供函數式攔截器
+     * - 攔截器執行順序：按照陣列順序執行
+     * - 建議順序：Loading -> Auth -> Error
      */
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(
+      withInterceptors([
+        loadingInterceptor,  // 1. 載入狀態追蹤
+        authInterceptor,     // 2. 添加認證 Token
+        errorInterceptor,    // 3. 錯誤處理
+      ]),
+      withInterceptorsFromDi() // 支援從 DI 注入的類別式攔截器（向後相容）
+    ),
 
     /**
      * 動畫支援
@@ -118,5 +137,16 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
+
+    /**
+     * 管道服務
+     * Pipe services
+     *
+     * 教學說明：
+     * DatePipe 和 CurrencyPipe 需要在全域提供，
+     * 以便自訂管道可以注入使用
+     */
+    DatePipe,
+    CurrencyPipe,
   ],
 };

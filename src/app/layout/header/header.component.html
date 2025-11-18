@@ -1,0 +1,172 @@
+<!--
+  頂部導航列
+  Header Navigation Bar
+-->
+
+<mat-toolbar color="primary" class="header">
+  <div class="header-container">
+    <!-- Logo 和應用程式名稱 -->
+    <div class="header-brand">
+      <a routerLink="/" class="brand-link">
+        <mat-icon class="brand-icon">store</mat-icon>
+        <span class="brand-text">{{ 'common.app_name' | translate }}</span>
+      </a>
+    </div>
+
+    <!-- 桌面版導航選單 -->
+    <nav class="header-nav desktop-nav">
+      @for (item of navItems; track item.path) {
+        @if (shouldShowNavItem(item)) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="active"
+            class="nav-link"
+            [matTooltip]="item.label | translate"
+          >
+            @if (item.badge) {
+              <mat-icon [matBadge]="item.badge" matBadgeColor="warn">
+                {{ item.icon }}
+              </mat-icon>
+            } @else {
+              <mat-icon>{{ item.icon }}</mat-icon>
+            }
+            <span class="nav-text">{{ item.label | translate }}</span>
+          </a>
+        }
+      }
+    </nav>
+
+    <!-- 右側功能按鈕 -->
+    <div class="header-actions">
+      <!-- 主題切換 -->
+      <button
+        mat-icon-button
+        (click)="toggleTheme()"
+        [matTooltip]="'theme.switch_theme' | translate"
+        class="action-button"
+      >
+        @if (currentTheme() === 'dark') {
+          <mat-icon>light_mode</mat-icon>
+        } @else {
+          <mat-icon>dark_mode</mat-icon>
+        }
+      </button>
+
+      <!-- 語言切換 -->
+      <button
+        mat-icon-button
+        (click)="toggleLanguage()"
+        [matTooltip]="'language.switch_language' | translate"
+        class="action-button"
+      >
+        <mat-icon>language</mat-icon>
+      </button>
+
+      <!-- 未登入狀態 -->
+      @if (!isAuthenticated()) {
+        <button
+          mat-raised-button
+          color="accent"
+          routerLink="/auth/login"
+          class="login-button"
+        >
+          <mat-icon>login</mat-icon>
+          {{ 'common.login' | translate }}
+        </button>
+      }
+
+      <!-- 已登入狀態 -->
+      @if (isAuthenticated()) {
+        <!-- 用戶選單 -->
+        <button
+          mat-button
+          [matMenuTriggerFor]="userMenu"
+          class="user-button"
+        >
+          <img
+            [src]="currentUser()?.avatarUrl || 'https://i.pravatar.cc/40'"
+            [alt]="currentUser()?.fullName || 'User'"
+            class="user-avatar"
+          />
+          <span class="user-name">{{ currentUser()?.fullName }}</span>
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+
+        <!-- 用戶下拉選單 -->
+        <mat-menu #userMenu="matMenu" class="user-menu">
+          <!-- 用戶資訊 -->
+          <div class="user-menu-header">
+            <img
+              [src]="currentUser()?.avatarUrl || 'https://i.pravatar.cc/60'"
+              [alt]="currentUser()?.fullName || 'User'"
+              class="user-menu-avatar"
+            />
+            <div class="user-menu-info">
+              <div class="user-menu-name">{{ currentUser()?.fullName }}</div>
+              <div class="user-menu-email">{{ currentUser()?.email }}</div>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- 選單項目 -->
+          <button mat-menu-item (click)="goToProfile()">
+            <mat-icon>person</mat-icon>
+            <span>{{ 'nav.profile' | translate }}</span>
+          </button>
+
+          <button mat-menu-item (click)="goToSettings()">
+            <mat-icon>settings</mat-icon>
+            <span>{{ 'nav.settings' | translate }}</span>
+          </button>
+
+          @if (isAdmin()) {
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="goToAdmin()">
+              <mat-icon>admin_panel_settings</mat-icon>
+              <span>{{ 'nav.admin' | translate }}</span>
+            </button>
+          }
+
+          <mat-divider></mat-divider>
+
+          <button mat-menu-item (click)="logout()">
+            <mat-icon color="warn">logout</mat-icon>
+            <span>{{ 'common.logout' | translate }}</span>
+          </button>
+        </mat-menu>
+      }
+
+      <!-- 手機版選單按鈕 -->
+      <button
+        mat-icon-button
+        (click)="toggleMobileMenu()"
+        class="mobile-menu-button"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- 手機版導航選單 -->
+  @if (showMobileMenu()) {
+    <div class="mobile-nav">
+      @for (item of navItems; track item.path) {
+        @if (shouldShowNavItem(item)) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="active"
+            class="mobile-nav-link"
+            (click)="toggleMobileMenu()"
+          >
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span>{{ item.label | translate }}</span>
+            @if (item.badge) {
+              <span class="mobile-nav-badge">{{ item.badge }}</span>
+            }
+          </a>
+        }
+      }
+    </div>
+  }
+</mat-toolbar>
