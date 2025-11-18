@@ -321,5 +321,45 @@
     "TWD": "NT$",
     "USD": "US$",
     "symbol": "NT$"
+  },
+  "product": {
+    "list": {
+      "title": "Products",
+      "subtitle": "Explore our curated collection of quality products",
+      "search": "Search Products",
+      "searchPlaceholder": "Enter product name or keyword...",
+      "sortBy": "Sort By",
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "noProducts": "No Products Found",
+      "noProductsDesc": "No products match your criteria. Please try adjusting your search.",
+      "clearSearch": "Clear Search"
+    },
+    "detail": {
+      "title": "Product Details",
+      "description": "Description",
+      "specifications": "Specifications",
+      "reviews": "Reviews",
+      "relatedProducts": "Related Products",
+      "quantity": "Quantity",
+      "stock": "Stock",
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock",
+      "lowStock": "Low Stock"
+    },
+    "featured": "Featured",
+    "new": "New",
+    "sale": "Sale",
+    "sold": "Sold",
+    "rating": "Rating",
+    "reviews": "Reviews",
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "viewDetails": "View Details",
+    "category": "Category",
+    "price": "Price",
+    "originalPrice": "Original Price",
+    "discount": "Discount",
+    "tag": "Tag"
   }
 }

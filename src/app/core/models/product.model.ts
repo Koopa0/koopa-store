@@ -313,3 +313,55 @@ export interface ProductListItem {
   /** 更新時間 / Updated timestamp */
   updatedAt: Date;
 }
+
+/**
+ * 商品狀態枚舉
+ * Product status enum
+ */
+export type ProductStatus = 'draft' | 'active' | 'archived';
+
+/**
+ * 簡化的商品分類
+ * Simplified product category
+ */
+export interface ProductCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  imageUrl?: string;
+  status: ProductStatus;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/**
+ * 商品列表查詢參數
+ * Product list query parameters
+ */
+export interface ProductListParams {
+  /** 頁碼 / Page number */
+  page?: number;
+  /** 每頁數量 / Items per page */
+  limit?: number;
+  /** 搜尋關鍵字 / Search keyword */
+  search?: string;
+  /** 分類 ID / Category ID */
+  categoryId?: string;
+  /** 品牌 ID / Brand ID */
+  brandId?: string;
+  /** 商品狀態 / Product status */
+  status?: ProductStatus;
+  /** 排序欄位 / Sort field */
+  sortBy?: string;
+  /** 排序方向 / Sort order */
+  sortOrder?: 'asc' | 'desc';
+  /** 最低價格 / Minimum price */
+  minPrice?: number;
+  /** 最高價格 / Maximum price */
+  maxPrice?: number;
+  /** 是否精選 / Is featured */
+  isFeatured?: boolean;
+  /** 標籤 / Tags */
+  tags?: string[];
+}

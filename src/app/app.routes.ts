@@ -62,6 +62,33 @@ export const routes: Routes = [
   },
 
   /**
+   * 商品路由
+   * Product routes
+   *
+   * 教學說明：懶載入商品相關元件
+   */
+  {
+    path: 'products',
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/product/pages/product-list/product-list.component').then(
+            (m) => m.ProductListComponent
+          ),
+      },
+      {
+        path: ':id',
+        loadComponent: () =>
+          import('./features/product/pages/product-detail/product-detail.component').then(
+            (m) => m.ProductDetailComponent
+          ),
+      },
+    ],
+  },
+
+  /**
    * 管理後台路由（需要管理員權限）
    * Admin routes (requires ADMIN role)
    */

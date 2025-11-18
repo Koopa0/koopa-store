@@ -1,0 +1,453 @@
+/**
+ * 商品列表頁面樣式
+ * Product List Page Styles
+ *
+ * 教學重點 / Teaching Points:
+ * 1. CSS Grid 佈局
+ * 2. 響應式設計
+ * 3. 卡片 hover 效果
+ * 4. 深淺主題支援
+ */
+
+@use '@angular/material' as mat;
+
+.product-list-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  /**
+   * 頁面標題區
+   * Page header section
+   */
+  .page-header {
+    margin-bottom: 2rem;
+
+    .header-content {
+      margin-bottom: 1.5rem;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+      color: var(--text-primary);
+    }
+
+    .page-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+  }
+
+  /**
+   * 搜尋和篩選工具列
+   * Search and filter toolbar
+   */
+  .toolbar {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    .search-field {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .sort-field {
+      min-width: 180px;
+    }
+
+    .sort-order-btn {
+      margin-top: 4px;
+    }
+  }
+
+  /**
+   * 載入動畫容器
+   * Loading spinner container
+   */
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+
+    .loading-text {
+      margin-top: 1rem;
+      color: var(--text-secondary);
+    }
+  }
+
+  /**
+   * 商品網格
+   * Product grid
+   *
+   * 教學說明：
+   * 使用 CSS Grid 建立響應式商品網格
+   * - 大螢幕：4 欄
+   * - 中螢幕：3 欄
+   * - 小螢幕：2 欄
+   * - 手機：1 欄
+   */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    /**
+     * 商品卡片
+     * Product card
+     */
+    .product-card {
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+
+        .product-overlay {
+          opacity: 1;
+        }
+      }
+
+      /**
+       * 商品圖片容器
+       * Product image container
+       */
+      .product-image-container {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 1 / 1;
+
+        .product-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+        }
+
+        &:hover .product-image {
+          transform: scale(1.05);
+        }
+
+        /**
+         * 折扣標籤
+         * Discount badge
+         */
+        .discount-badge {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          background-color: #f44336;
+          color: white;
+          padding: 0.5rem 0.75rem;
+          border-radius: 4px;
+          font-weight: 600;
+          font-size: 0.875rem;
+          z-index: 2;
+        }
+
+        /**
+         * 精選標籤
+         * Featured chip
+         */
+        .featured-chip {
+          position: absolute;
+          top: 12px;
+          left: 12px;
+          background-color: #ff9800;
+          color: white;
+          z-index: 2;
+
+          ::ng-deep {
+            .mat-mdc-chip-action-label {
+              display: flex;
+              align-items: center;
+              gap: 0.25rem;
+
+              mat-icon {
+                font-size: 16px;
+                width: 16px;
+                height: 16px;
+              }
+            }
+          }
+        }
+
+        /**
+         * 懸停覆蓋層
+         * Hover overlay
+         */
+        .product-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+      }
+
+      /**
+       * 商品資訊
+       * Product info
+       */
+      .product-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem !important;
+
+        .product-category {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          color: var(--primary-color);
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+
+        .product-name {
+          font-size: 1.125rem;
+          font-weight: 600;
+          margin: 0 0 0.5rem 0;
+          color: var(--text-primary);
+          cursor: pointer;
+          transition: color 0.2s ease;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+
+          &:hover {
+            color: var(--primary-color);
+          }
+        }
+
+        .product-description {
+          font-size: 0.875rem;
+          color: var(--text-secondary);
+          margin: 0 0 1rem 0;
+          line-height: 1.5;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        /**
+         * 商品中繼資料
+         * Product metadata
+         */
+        .product-meta {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 0.75rem;
+          font-size: 0.875rem;
+
+          .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+
+            .star-icon {
+              color: #ffa000;
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+            }
+
+            .rating-value {
+              font-weight: 600;
+            }
+
+            .review-count {
+              color: var(--text-secondary);
+            }
+          }
+
+          .sold-count {
+            color: var(--text-secondary);
+          }
+        }
+
+        /**
+         * 商品標籤
+         * Product tags
+         */
+        .product-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+
+          .tag-chip {
+            font-size: 0.75rem;
+            height: 24px;
+
+            ::ng-deep .mat-mdc-chip-action-label {
+              padding: 0 8px;
+            }
+          }
+        }
+
+        /**
+         * 商品頁尾（價格和按鈕）
+         * Product footer (price and actions)
+         */
+        .product-footer {
+          margin-top: auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+
+          .price-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            .compare-price {
+              font-size: 0.875rem;
+              color: var(--text-secondary);
+              text-decoration: line-through;
+            }
+
+            .current-price {
+              font-size: 1.5rem;
+              font-weight: 700;
+              color: var(--primary-color);
+            }
+          }
+
+          .add-to-cart-btn {
+            white-space: nowrap;
+
+            ::ng-deep .mat-icon {
+              margin-right: 0.25rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * 分頁器
+   * Paginator
+   */
+  .product-paginator {
+    margin-top: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /**
+   * 空狀態
+   * Empty state
+   */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+
+    .empty-icon {
+      font-size: 80px;
+      width: 80px;
+      height: 80px;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin: 0 0 0.5rem 0;
+      color: var(--text-primary);
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin: 0 0 1.5rem 0;
+    }
+  }
+}
+
+/**
+ * 響應式設計
+ * Responsive design
+ */
+
+// 平板 Tablet
+@media (max-width: 960px) {
+  .product-list-page {
+    padding: 1.5rem;
+
+    .product-grid {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+  }
+}
+
+// 手機 Mobile
+@media (max-width: 600px) {
+  .product-list-page {
+    padding: 1rem;
+
+    .page-header {
+      .page-title {
+        font-size: 1.5rem;
+      }
+
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+
+        .search-field,
+        .sort-field {
+          width: 100%;
+        }
+
+        .sort-order-btn {
+          align-self: flex-end;
+        }
+      }
+    }
+
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+/**
+ * 深色主題調整
+ * Dark theme adjustments
+ */
+@media (prefers-color-scheme: dark) {
+  .product-list-page {
+    .product-card {
+      &:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    .product-paginator {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
