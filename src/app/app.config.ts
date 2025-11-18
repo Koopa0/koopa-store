@@ -17,6 +17,7 @@ import {
   provideZoneChangeDetection,
   importProvidersFrom,
 } from '@angular/core';
+import { DatePipe, CurrencyPipe } from '@angular/common';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import {
   provideHttpClient,
@@ -136,5 +137,16 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
+
+    /**
+     * 管道服務
+     * Pipe services
+     *
+     * 教學說明：
+     * DatePipe 和 CurrencyPipe 需要在全域提供，
+     * 以便自訂管道可以注入使用
+     */
+    DatePipe,
+    CurrencyPipe,
   ],
 };
