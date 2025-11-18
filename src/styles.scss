@@ -389,3 +389,100 @@ table {
   white-space: nowrap;
   border: 0;
 }
+
+/**
+ * 通知樣式
+ * Notification Styles
+ *
+ * Material Snackbar 的自定義樣式
+ */
+
+/* 基礎通知樣式 */
+.notification {
+  font-size: 14px;
+  font-weight: 500;
+
+  .mat-mdc-snack-bar-label {
+    color: white;
+  }
+
+  .mat-mdc-button {
+    color: white;
+    font-weight: 600;
+  }
+}
+
+/* 成功通知 */
+.notification-success {
+  .mdc-snackbar__surface {
+    background-color: #4caf50 !important;
+  }
+}
+
+/* 錯誤通知 */
+.notification-error {
+  .mdc-snackbar__surface {
+    background-color: #f44336 !important;
+  }
+}
+
+/* 警告通知 */
+.notification-warning {
+  .mdc-snackbar__surface {
+    background-color: #ff9800 !important;
+  }
+}
+
+/* 資訊通知 */
+.notification-info {
+  .mdc-snackbar__surface {
+    background-color: #2196f3 !important;
+  }
+}
+
+/* 載入中通知 */
+.notification-loading {
+  .mdc-snackbar__surface {
+    background-color: #607d8b !important;
+  }
+
+  .mat-mdc-snack-bar-label::after {
+    content: '...';
+    animation: dots 1.5s steps(4, end) infinite;
+  }
+}
+
+@keyframes dots {
+  0%, 20% {
+    content: '.';
+  }
+  40% {
+    content: '..';
+  }
+  60%, 100% {
+    content: '...';
+  }
+}
+
+/* 暗色主題下的通知樣式調整 */
+.dark-theme {
+  .notification-success .mdc-snackbar__surface {
+    background-color: #388e3c !important;
+  }
+
+  .notification-error .mdc-snackbar__surface {
+    background-color: #d32f2f !important;
+  }
+
+  .notification-warning .mdc-snackbar__surface {
+    background-color: #f57c00 !important;
+  }
+
+  .notification-info .mdc-snackbar__surface {
+    background-color: #1976d2 !important;
+  }
+
+  .notification-loading .mdc-snackbar__surface {
+    background-color: #455a64 !important;
+  }
+}

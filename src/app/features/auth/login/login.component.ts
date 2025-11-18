@@ -36,7 +36,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 
 // 服務
-import { AuthService, LoadingService } from '@core/services';
+import { AuthService, LoadingService, NotificationService } from '@core/services';
 import { LoginRequest } from '@core/models/user.model';
 
 @Component({
@@ -67,6 +67,7 @@ export class LoginComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly loadingService = inject(LoadingService);
+  private readonly notificationService = inject(NotificationService);
 
   /**
    * 登入表單
@@ -143,12 +144,23 @@ export class LoginComponent implements OnInit {
     this.authService.login(credentials).subscribe({
       next: (response) => {
         console.log('[LoginComponent] Login successful');
+
+        // 顯示成功通知
+        this.notificationService.success('auth.login.success');
+
         // 導向返回 URL 或首頁
         this.router.navigate([this.returnUrl]);
       },
       error: (error) => {
         console.error('[LoginComponent] Login failed:', error);
+
+        // 設定錯誤訊息
         this.errorMessage.set(error.message || '登入失敗，請稍後再試');
+
+        // 顯示錯誤通知
+        this.notificationService.error(
+          error.message || 'auth.login.error'
+        );
       },
     });
   }
