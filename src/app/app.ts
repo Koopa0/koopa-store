@@ -18,8 +18,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
 // 核心服務
-import { TranslationService } from '@core/services/translation.service';
-import { ThemeService } from '@core/services/theme.service';
+import { TranslationService, ThemeService } from '@core/services';
 
 @Component({
   /**
