@@ -1,0 +1,95 @@
+<!--
+  底部資訊
+  Footer Information
+-->
+
+<footer class="footer">
+  <div class="footer-container">
+    <!-- 頂部區域 -->
+    <div class="footer-top">
+      <!-- 公司資訊 -->
+      <div class="footer-section">
+        <h3 class="footer-title">{{ 'common.app_name' | translate }}</h3>
+        <p class="footer-description">
+          {{ 'footer.description' | translate }}
+        </p>
+        <!-- 社交媒體連結 -->
+        <div class="footer-social">
+          @for (social of socialLinks; track social.name) {
+            <button
+              mat-icon-button
+              (click)="openSocialLink(social.url)"
+              [attr.aria-label]="social.name"
+              [style.color]="social.color"
+              class="social-button"
+            >
+              <mat-icon [fontIcon]="social.icon"></mat-icon>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- 公司連結 -->
+      <div class="footer-section">
+        <h4 class="footer-subtitle">{{ 'footer.company' | translate }}</h4>
+        <ul class="footer-links">
+          @for (link of footerLinks.company; track link.path) {
+            <li>
+              <a [routerLink]="link.path" class="footer-link">
+                {{ link.label | translate }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- 客戶支援 -->
+      <div class="footer-section">
+        <h4 class="footer-subtitle">{{ 'footer.support' | translate }}</h4>
+        <ul class="footer-links">
+          @for (link of footerLinks.support; track link.path) {
+            <li>
+              <a [routerLink]="link.path" class="footer-link">
+                {{ link.label | translate }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- 法律資訊 -->
+      <div class="footer-section">
+        <h4 class="footer-subtitle">{{ 'footer.legal' | translate }}</h4>
+        <ul class="footer-links">
+          @for (link of footerLinks.legal; track link.path) {
+            <li>
+              <a [routerLink]="link.path" class="footer-link">
+                {{ link.label | translate }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <mat-divider class="footer-divider"></mat-divider>
+
+    <!-- 底部區域 -->
+    <div class="footer-bottom">
+      <p class="footer-copyright">
+        © {{ currentYear }} {{ 'common.app_name' | translate }}.
+        {{ 'footer.all_rights_reserved' | translate }}
+      </p>
+      <div class="footer-badges">
+        <span class="footer-badge">
+          <mat-icon>verified_user</mat-icon>
+          {{ 'footer.secure_payment' | translate }}
+        </span>
+        <span class="footer-badge">
+          <mat-icon>local_shipping</mat-icon>
+          {{ 'footer.fast_delivery' | translate }}
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>

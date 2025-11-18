@@ -1,0 +1,345 @@
+/**
+ * 頂部導航樣式
+ * Header Styles
+ */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  gap: 2rem;
+}
+
+/**
+ * Logo 和品牌
+ * Logo and Brand
+ */
+.header-brand {
+  flex-shrink: 0;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  transition: opacity var(--transition-fast);
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.brand-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.brand-text {
+  @media (max-width: 600px) {
+    display: none;
+  }
+}
+
+/**
+ * 桌面版導航
+ * Desktop Navigation
+ */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+
+  @media (max-width: 960px) {
+    display: none;
+  }
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+  position: relative;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .nav-text {
+    font-size: 0.938rem;
+    font-weight: 500;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  &.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-weight: 600;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--accent-color);
+      border-radius: 3px 3px 0 0;
+    }
+  }
+}
+
+/**
+ * 右側功能區
+ * Header Actions
+ */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.action-button {
+  color: rgba(255, 255, 255, 0.9);
+
+  &:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/**
+ * 登入按鈕
+ * Login Button
+ */
+.login-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  @media (max-width: 600px) {
+    span {
+      display: none;
+    }
+  }
+}
+
+/**
+ * 用戶按鈕
+ * User Button
+ */
+.user-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  color: white;
+
+  @media (max-width: 768px) {
+    .user-name {
+      display: none;
+    }
+  }
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 0.938rem;
+  font-weight: 500;
+}
+
+/**
+ * 用戶選單
+ * User Menu
+ */
+.user-menu {
+  margin-top: 0.5rem;
+}
+
+.user-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--background-secondary);
+}
+
+.user-menu-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-menu-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-menu-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-menu-email {
+  font-size: 0.813rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/**
+ * 手機版選單按鈕
+ * Mobile Menu Button
+ */
+.mobile-menu-button {
+  display: none;
+  color: white;
+
+  @media (max-width: 960px) {
+    display: inline-flex;
+  }
+}
+
+/**
+ * 手機版導航
+ * Mobile Navigation
+ */
+.mobile-nav {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--primary-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  animation: slideDown var(--transition-normal) ease-out;
+
+  @media (min-width: 961px) {
+    display: none;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.9);
+  transition: all var(--transition-fast);
+  position: relative;
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  span {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  &.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-weight: 600;
+    border-left: 4px solid var(--accent-color);
+  }
+}
+
+.mobile-nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  margin-left: auto;
+  background-color: var(--warn-color);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+/**
+ * Material 元件覆寫
+ * Material Component Overrides
+ */
+::ng-deep {
+  .user-menu .mat-mdc-menu-content {
+    padding: 0;
+  }
+
+  .mat-mdc-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    min-height: 48px;
+
+    mat-icon {
+      margin: 0;
+    }
+  }
+}

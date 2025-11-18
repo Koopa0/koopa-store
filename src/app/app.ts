@@ -15,10 +15,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
 
 // 核心服務
 import { TranslationService, ThemeService } from '@core/services';
+
+// 佈局元件
+import { HeaderComponent } from './layout/header/header.component';
+import { FooterComponent } from './layout/footer/footer.component';
 
 @Component({
   /**
@@ -46,10 +49,15 @@ import { TranslationService, ThemeService } from '@core/services';
    *
    * 教學說明：
    * - RouterOutlet: 路由出口，用於顯示路由元件
-   * - CommonModule: 提供常用指令（*ngIf, *ngFor 等）
-   * - TranslateModule: 提供翻譯管道和指令
+   * - CommonModule: 提供常用指令
+   * - HeaderComponent/FooterComponent: 佈局元件
    */
-  imports: [RouterOutlet, CommonModule, TranslateModule],
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    HeaderComponent,
+    FooterComponent,
+  ],
 
   /**
    * 模板檔案路徑
