@@ -9,3 +9,4 @@
 
 export * from './button/button.component';
 export * from './card/card.component';
+export * from './variant-selector/variant-selector.component';

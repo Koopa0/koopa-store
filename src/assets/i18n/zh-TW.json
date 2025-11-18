@@ -131,7 +131,15 @@
     "save": "省下",
     "free_shipping": "免運費",
     "delivery_time": "配送時間",
-    "return_policy": "退貨政策"
+    "return_policy": "退貨政策",
+    "variant": {
+      "select": "選擇規格",
+      "price": "價格",
+      "stock": "庫存",
+      "in_stock": "件",
+      "out_of_stock": "無庫存",
+      "please_select_all": "請選擇所有規格選項"
+    }
   },
   "cart": {
     "title": "購物車",

@@ -156,6 +156,21 @@
 
           <mat-divider></mat-divider>
 
+          <!-- 變體選擇器 Variant Selector -->
+          @if (variantConfig() && variantConfig()!.hasVariants) {
+            <div class="variant-section">
+              <app-variant-selector
+                [options]="variantConfig()!.options"
+                [variants]="variantConfig()!.variants"
+                [basePrice]="product()!.price"
+                [defaultVariant]="variantConfig()!.defaultVariant"
+                (variantChange)="onVariantChange($event)"
+              ></app-variant-selector>
+            </div>
+
+            <mat-divider></mat-divider>
+          }
+
           <!-- 數量選擇器 Quantity Selector -->
           <div class="quantity-section">
             <span class="label">{{ 'product.detail.quantity' | translate }}:</span>

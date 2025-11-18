@@ -34,7 +34,14 @@ import { MatBadgeModule } from '@angular/material/badge';
 // Services and Models
 import { ProductService } from '../../services/product.service';
 import { CartService } from '@features/cart/services/cart.service';
-import { ProductListItem } from '@core/models/product.model';
+import {
+  ProductListItem,
+  ProductVariantConfig,
+  SelectedVariant,
+} from '@core/models/product.model';
+
+// Shared Components
+import { VariantSelectorComponent } from '@shared/components';
 
 // Pipes
 import { TranslateModule } from '@ngx-translate/core';
@@ -59,6 +66,7 @@ import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
     MatBadgeModule,
     TranslateModule,
     CurrencyFormatPipe,
+    VariantSelectorComponent,
   ],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
@@ -84,6 +92,13 @@ export class ProductDetailComponent implements OnInit {
   public readonly selectedImageIndex = signal<number>(0);
 
   /**
+   * 變體相關 Signals
+   * Variant-related signals
+   */
+  public readonly variantConfig = signal<ProductVariantConfig | null>(null);
+  public readonly selectedVariant = signal<SelectedVariant | null>(null);
+
+  /**
    * 表單控制項
    * Form controls
    */
@@ -105,10 +120,24 @@ export class ProductDetailComponent implements OnInit {
   public readonly totalPrice = computed(() => {
     const prod = this.product();
     const quantity = this.quantityControl.value || 1;
+    const variant = this.selectedVariant();
+
+    // 如果有選擇變體，使用變體價格
+    if (variant) {
+      return variant.price * quantity;
+    }
+
     return prod ? prod.price * quantity : 0;
   });
 
   public readonly isInStock = computed(() => {
+    const variant = this.selectedVariant();
+
+    // 如果有選擇變體，使用變體庫存
+    if (variant) {
+      return variant.availableStock > 0;
+    }
+
     const prod = this.product();
     return prod ? prod.stockQuantity > 0 : false;
   });
@@ -154,6 +183,9 @@ export class ProductDetailComponent implements OnInit {
         next: (product) => {
           this.product.set(product);
           this.loading.set(false);
+
+          // 載入變體配置
+          this.loadVariantConfig(id);
         },
         error: (err) => {
           console.error('Failed to load product:', err);
@@ -161,6 +193,44 @@ export class ProductDetailComponent implements OnInit {
           this.loading.set(false);
         },
       });
+  }
+
+  /**
+   * 載入變體配置
+   * Load variant configuration
+   */
+  private loadVariantConfig(productId: string): void {
+    this.productService
+      .getProductVariantConfig(productId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (config) => {
+          this.variantConfig.set(config);
+
+          // 如果有預設變體，設置為選中
+          if (config.defaultVariant) {
+            this.selectedVariant.set({
+              variantId: config.defaultVariant.id,
+              attributes: config.defaultVariant.attributes,
+              price: config.defaultVariant.priceOverride || this.product()!.price,
+              availableStock: config.defaultVariant.stockQuantity,
+              sku: config.defaultVariant.variantSku,
+            });
+          }
+        },
+        error: (err) => {
+          console.error('Failed to load variant config:', err);
+          // 變體載入失敗不影響主要功能
+        },
+      });
+  }
+
+  /**
+   * 處理變體選擇變更
+   * Handle variant selection change
+   */
+  onVariantChange(variant: SelectedVariant | null): void {
+    this.selectedVariant.set(variant);
   }
 
   /**
@@ -193,14 +263,29 @@ export class ProductDetailComponent implements OnInit {
   addToCart(): void {
     const prod = this.product();
     const quantity = this.quantityControl.value || 1;
+    const variant = this.selectedVariant();
+    const config = this.variantConfig();
+
+    // 如果商品有變體但用戶尚未選擇，提示用戶選擇
+    if (config?.hasVariants && !variant) {
+      console.warn('[ProductDetail] Please select variant options first');
+      // TODO: 顯示提示訊息「請先選擇規格」
+      return;
+    }
 
     if (prod) {
+      // TODO: 當 CartService 完整支援變體後，傳遞 variantId
+      // this.cartService.addToCart(prod, quantity, variant?.variantId)
       this.cartService
         .addToCart(prod, quantity)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            console.log('Added to cart successfully');
+            console.log('[ProductDetail] Added to cart successfully', {
+              product: prod.name,
+              variant: variant?.attributes,
+              quantity,
+            });
             // TODO: 顯示成功訊息
           },
           error: (err) => {
@@ -218,15 +303,30 @@ export class ProductDetailComponent implements OnInit {
   buyNow(): void {
     const prod = this.product();
     const quantity = this.quantityControl.value || 1;
+    const variant = this.selectedVariant();
+    const config = this.variantConfig();
+
+    // 如果商品有變體但用戶尚未選擇，提示用戶選擇
+    if (config?.hasVariants && !variant) {
+      console.warn('[ProductDetail] Please select variant options first');
+      // TODO: 顯示提示訊息「請先選擇規格」
+      return;
+    }
 
     if (prod) {
       // 先加入購物車，然後導航到結帳頁面
+      // TODO: 當 CartService 完整支援變體後，傳遞 variantId
       this.cartService
         .addToCart(prod, quantity)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            // TODO: 導航到結帳頁面
+            console.log('[ProductDetail] Buy now -', {
+              product: prod.name,
+              variant: variant?.attributes,
+              quantity,
+            });
+            // TODO: 導向結帳頁面
             this.router.navigate(['/cart']);
           },
           error: (err) => {
