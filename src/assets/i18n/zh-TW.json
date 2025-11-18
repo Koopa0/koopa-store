@@ -32,7 +32,8 @@
     "yes": "是",
     "no": "否",
     "back_to_cart": "返回購物車",
-    "quantity": "數量"
+    "quantity": "數量",
+    "retry": "重試"
   },
   "nav": {
     "products": "商品",
@@ -180,6 +181,7 @@
     "shipping_address": "配送地址",
     "billing_address": "帳單地址",
     "order_summary": "訂單摘要",
+    "status_draft": "草稿",
     "status_pending": "待付款",
     "status_paid": "已付款",
     "status_confirmed": "已確認",
@@ -192,7 +194,23 @@
     "status_refunded": "已退款",
     "created": "訂單已建立",
     "cancelled": "訂單已取消",
-    "cancel_confirm": "確定要取消此訂單嗎？"
+    "cancel_confirm": "確定要取消此訂單嗎？",
+    "error_loading": "載入訂單失敗",
+    "confirmation": {
+      "title": "訂單已成功建立！",
+      "subtitle": "感謝您的購買，我們將盡快為您處理訂單",
+      "help_text": "如有任何問題，請聯繫客服或查看訂單詳情"
+    },
+    "filter": {
+      "all": "全部訂單",
+      "status": "訂單狀態"
+    },
+    "empty": {
+      "title": "目前沒有訂單",
+      "description": "您還沒有任何訂單記錄，快去選購商品吧！"
+    },
+    "paid_at": "付款時間",
+    "shipped_at": "發貨時間"
   },
   "profile": {
     "title": "個人資料",
