@@ -15,7 +15,7 @@
 
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, delay, map, catchError, throwError } from 'rxjs';
+import { Observable, of, delay, map, catchError, throwError, switchMap, forkJoin } from 'rxjs';
 import { environment } from '@environments/environment';
 import {
   Order,
@@ -26,6 +26,8 @@ import {
   CreateOrderRequest,
 } from '@core/models/order.model';
 import { PaginatedResponse, ApiResponse } from '@core/models/common.model';
+import { InventoryService } from '@core/services/inventory.service';
+import { CreateInventoryTransactionRequest } from '@core/models/inventory.model';
 
 /**
  * Mock 訂單資料
@@ -38,6 +40,7 @@ const MOCK_ORDERS: OrderDetail[] = [];
 })
 export class OrderService {
   private readonly http = inject(HttpClient);
+  private readonly inventoryService = inject(InventoryService);
   private readonly apiUrl = `${environment.apiUrl}/orders`;
   private readonly useMock = true; // TODO: 後端完成後改為 false
 
@@ -536,6 +539,13 @@ export class OrderService {
         break;
     }
 
+    // 創建庫存交易記錄（僅當訂單付款時）
+    if (status === OrderStatus.PAID) {
+      return this.createInventoryTransactionsForOrder(order, 'sale').pipe(
+        map(() => order)
+      );
+    }
+
     return of(order);
   }
 
@@ -543,7 +553,69 @@ export class OrderService {
    * Mock: 取消訂單
    */
   private mockCancelOrder(orderId: string, reason?: string): Observable<Order> {
-    return this.mockUpdateOrderStatus(orderId, OrderStatus.CANCELLED);
+    const order = MOCK_ORDERS.find((o) => o.id === orderId);
+    if (!order) {
+      return throwError(() => new Error(`Order not found: ${orderId}`));
+    }
+
+    // 更新訂單狀態為取消
+    order.status = OrderStatus.CANCELLED;
+    order.cancelledAt = new Date();
+    order.updatedAt = new Date();
+
+    // 如果訂單已付款，需要創建退貨交易恢復庫存
+    if (order.paidAt) {
+      return this.createInventoryTransactionsForOrder(order, 'return').pipe(
+        map(() => order)
+      );
+    }
+
+    return of(order);
+  }
+
+  /**
+   * 為訂單創建庫存交易記錄
+   * Create inventory transactions for order
+   *
+   * @param order 訂單詳情
+   * @param type 交易類型 ('sale' 或 'return')
+   * @returns Observable<void>
+   */
+  private createInventoryTransactionsForOrder(
+    order: OrderDetail,
+    type: 'sale' | 'return'
+  ): Observable<void> {
+    // 為每個訂單項目創建庫存交易
+    const transactionRequests: Observable<any>[] = order.items.map((item) => {
+      const request: CreateInventoryTransactionRequest = {
+        productId: item.productId,
+        variantId: item.variantId,
+        type: type,
+        quantityChange: type === 'sale' ? -item.quantity : item.quantity,
+        referenceType: 'order',
+        referenceId: order.id,
+        referenceNumber: order.orderNumber,
+        note:
+          type === 'sale'
+            ? `訂單銷售出庫 - ${item.productSnapshot.name}`
+            : `訂單取消退貨入庫 - ${item.productSnapshot.name}`,
+      };
+
+      return this.inventoryService.createTransaction(request);
+    });
+
+    // 等待所有交易創建完成
+    if (transactionRequests.length === 0) {
+      return of(void 0);
+    }
+
+    return forkJoin(transactionRequests).pipe(
+      map(() => {
+        console.log(
+          `[OrderService] Created ${transactionRequests.length} inventory transactions for order ${order.orderNumber} (${type})`
+        );
+      })
+    );
   }
 
   /**
