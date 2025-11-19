@@ -30,6 +30,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 // Services
 import { UserNotificationService } from '@core/services/user-notification.service';
+import { LoggerService } from '@core/services';
 
 // Models
 import {
@@ -61,6 +62,7 @@ export class NotificationCenterComponent implements OnInit {
    */
   private readonly notificationService = inject(UserNotificationService);
   private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
 
   /**
    * 公開的 Signal / Public Signals
@@ -101,10 +103,10 @@ export class NotificationCenterComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          console.log('[NotificationCenter] Loaded notifications:', response);
+          this.logger.info('[NotificationCenter] Loaded notifications:', response);
         },
         error: (err) => {
-          console.error('[NotificationCenter] Failed to load notifications:', err);
+          this.logger.error('[NotificationCenter] Failed to load notifications:', err);
         },
       });
   }
@@ -125,10 +127,10 @@ export class NotificationCenterComponent implements OnInit {
     if (!notification.isRead) {
       this.notificationService.markAsRead(notification.id).subscribe({
         next: () => {
-          console.log('[NotificationCenter] Marked as read:', notification.id);
+          this.logger.info('[NotificationCenter] Marked as read:', notification.id);
         },
         error: (err) => {
-          console.error('[NotificationCenter] Failed to mark as read:', err);
+          this.logger.error('[NotificationCenter] Failed to mark as read:', err);
         },
       });
     }
@@ -145,10 +147,10 @@ export class NotificationCenterComponent implements OnInit {
   onMarkAllAsRead(): void {
     this.notificationService.markAllAsRead('mock-user-id').subscribe({
       next: () => {
-        console.log('[NotificationCenter] All notifications marked as read');
+        this.logger.info('[NotificationCenter] All notifications marked as read');
       },
       error: (err) => {
-        console.error('[NotificationCenter] Failed to mark all as read:', err);
+        this.logger.error('[NotificationCenter] Failed to mark all as read:', err);
       },
     });
   }
@@ -193,11 +195,19 @@ export class NotificationCenterComponent implements OnInit {
 
     this.notificationService.deleteNotification(notificationId).subscribe({
       next: () => {
-        console.log('[NotificationCenter] Notification deleted:', notificationId);
+        this.logger.info('[NotificationCenter] Notification deleted:', notificationId);
       },
       error: (err) => {
-        console.error('[NotificationCenter] Failed to delete notification:', err);
+        this.logger.error('[NotificationCenter] Failed to delete notification:', err);
       },
     });
+  }
+
+  /**
+   * TrackBy 函數用於 *ngFor 效能優化
+   * TrackBy function for *ngFor performance optimization
+   */
+  trackByNotificationId(index: number, notification: UserNotificationDetail): string {
+    return notification.id;
   }
 }

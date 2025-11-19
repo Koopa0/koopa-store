@@ -33,7 +33,11 @@
     "no": "否",
     "back_to_cart": "返回購物車",
     "quantity": "數量",
-    "retry": "重試"
+    "retry": "重試",
+    "increase_quantity": "增加數量",
+    "decrease_quantity": "減少數量",
+    "remove": "移除",
+    "menu": "選單"
   },
   "nav": {
     "products": "商品",
@@ -680,6 +684,9 @@
     "view_all": "查看全部通知",
     "empty": "目前沒有通知",
     "loading": "載入中...",
+    "unread_count": "未讀通知數量",
+    "delete_notification": "刪除通知",
+    "open_notification": "開啟通知",
     "type": {
       "order_created": "訂單已建立",
       "order_paid": "付款成功",

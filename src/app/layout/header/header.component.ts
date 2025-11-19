@@ -35,6 +35,7 @@ import {
   ThemeService,
   TranslationService,
   NotificationService,
+  LoggerService,
 } from '@core/services';
 
 // 組件
@@ -70,6 +71,7 @@ export class HeaderComponent {
   private readonly translationService = inject(TranslationService);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
 
   /**
    * 當前用戶
@@ -193,7 +195,7 @@ export class HeaderComponent {
         this.notificationService.success('auth.logout.success');
       }
     } catch (error) {
-      console.error('[Header] Logout error:', error);
+      this.logger.error('[Header] Logout error:', error);
       this.notificationService.error('common.error');
     }
   }

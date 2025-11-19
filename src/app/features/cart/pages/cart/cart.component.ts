@@ -32,6 +32,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 // Services and Models
 import { CartService } from '../../services/cart.service';
 import { CartItemDetail } from '@core/models/cart.model';
+import { LoggerService } from '@core/services';
 
 // Pipes
 import { TranslateModule } from '@ngx-translate/core';
@@ -67,6 +68,7 @@ export class CartComponent implements OnInit {
   private readonly router = inject(Router);
   public readonly cartService = inject(CartService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
 
   /**
    * 從 CartService 取得的狀態
@@ -101,10 +103,10 @@ export class CartComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            console.log('Quantity updated');
+            this.logger.info('Quantity updated');
           },
           error: (err) => {
-            console.error('Failed to update quantity:', err);
+            this.logger.error('Failed to update quantity:', err);
           },
         });
     }
@@ -122,10 +124,10 @@ export class CartComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            console.log('Quantity updated');
+            this.logger.info('Quantity updated');
           },
           error: (err) => {
-            console.error('Failed to update quantity:', err);
+            this.logger.error('Failed to update quantity:', err);
           },
         });
     }
@@ -145,10 +147,10 @@ export class CartComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            console.log('Quantity updated');
+            this.logger.info('Quantity updated');
           },
         error: (err) => {
-          console.error('Failed to update quantity:', err);
+          this.logger.error('Failed to update quantity:', err);
           // 恢復原始值
           input.value = item.quantity.toString();
         },
@@ -170,10 +172,10 @@ export class CartComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            console.log('Item removed');
+            this.logger.info('Item removed');
           },
           error: (err) => {
-            console.error('Failed to remove item:', err);
+            this.logger.error('Failed to remove item:', err);
           },
         });
     }
@@ -190,10 +192,10 @@ export class CartComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            console.log('Cart cleared');
+            this.logger.info('Cart cleared');
           },
           error: (err) => {
-            console.error('Failed to clear cart:', err);
+            this.logger.error('Failed to clear cart:', err);
           },
         });
     }
@@ -213,7 +215,7 @@ export class CartComponent implements OnInit {
    */
   checkout(): void {
     // TODO: 實作結帳頁面
-    console.log('Checkout:', this.cartSummary());
+    this.logger.info('Checkout:', this.cartSummary());
     alert('結帳功能開發中...');
   }
 

@@ -30,6 +30,7 @@ import { MatTableModule } from '@angular/material/table';
 // Services
 import { OrderService } from '@features/order/services/order.service';
 import { NotificationService } from '@core/services/notification.service';
+import { LoggerService } from '@core/services';
 
 // Pipes
 import { TranslateModule } from '@ngx-translate/core';
@@ -61,6 +62,7 @@ export class OrderDetailComponent implements OnInit {
   private readonly orderService = inject(OrderService);
   private readonly notificationService = inject(NotificationService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
 
   /**
    * 訂單 ID（從路由參數取得）
@@ -107,7 +109,7 @@ export class OrderDetailComponent implements OnInit {
     this.orderId = this.route.snapshot.paramMap.get('id');
 
     if (!this.orderId) {
-      console.error('[OrderDetail] No order ID in route');
+      this.logger.error('[OrderDetail] No order ID in route');
       this.router.navigate(['/orders']);
       return;
     }
@@ -124,10 +126,10 @@ export class OrderDetailComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (order) => {
-          console.log('[OrderDetail] Order loaded:', order);
+          this.logger.info('[OrderDetail] Order loaded:', order);
         },
         error: (error) => {
-          console.error('[OrderDetail] Failed to load order:', error);
+          this.logger.error('[OrderDetail] Failed to load order:', error);
           // 如果訂單不存在，導航回訂單列表
           setTimeout(() => {
             this.router.navigate(['/orders']);
@@ -172,7 +174,7 @@ export class OrderDetailComponent implements OnInit {
    */
   reorder(): void {
     // TODO: 實作再次購買功能
-    console.log('Reorder:', this.currentOrder()?.orderNumber);
+    this.logger.info('Reorder:', this.currentOrder()?.orderNumber);
     this.notificationService.info('再次購買功能開發中...');
   }
 
@@ -181,7 +183,7 @@ export class OrderDetailComponent implements OnInit {
    */
   trackOrder(): void {
     // TODO: 實作訂單追蹤功能
-    console.log('Track order:', this.currentOrder()?.orderNumber);
+    this.logger.info('Track order:', this.currentOrder()?.orderNumber);
     this.notificationService.info('訂單追蹤功能開發中...');
   }
 
@@ -190,7 +192,7 @@ export class OrderDetailComponent implements OnInit {
    */
   requestReturn(): void {
     // TODO: 實作退貨申請功能
-    console.log('Request return:', this.currentOrder()?.orderNumber);
+    this.logger.info('Request return:', this.currentOrder()?.orderNumber);
     this.notificationService.info('退貨申請功能開發中...');
   }
 

@@ -35,6 +35,7 @@ import { CartService } from '@features/cart/services/cart.service';
 import { OrderService } from '@features/order/services/order.service';
 import { PaymentService } from '@core/services/payment.service';
 import { NotificationService } from '@core/services/notification.service';
+import { LoggerService } from '@core/services';
 
 // Models
 import { CreateOrderRequest, OrderAddress } from '@core/models/order.model';
@@ -76,6 +77,7 @@ export class CheckoutComponent implements OnInit {
   private readonly orderService = inject(OrderService);
   private readonly paymentService = inject(PaymentService);
   private readonly notificationService = inject(NotificationService);
+  private readonly logger = inject(LoggerService);
 
   /**
    * 購物車項目 Signal
@@ -157,7 +159,7 @@ export class CheckoutComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('[Checkout] Failed to load payment methods:', error);
+          this.logger.error('[Checkout] Failed to load payment methods:', error);
           this.notificationService.error('載入支付方式失敗');
         },
       });
@@ -220,7 +222,7 @@ export class CheckoutComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (order) => {
-          console.log('[Checkout] Order created:', order);
+          this.logger.info('[Checkout] Order created:', order);
           this.notificationService.success('訂單建立成功！');
 
           // Step 2: 處理支付
@@ -254,7 +256,7 @@ export class CheckoutComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {
-          console.log('[Checkout] Payment successful:', result);
+          this.logger.info('[Checkout] Payment successful:', result);
           this.processing.set(false);
           this.processingStage.set('complete');
           this.notificationService.success('支付成功！');
@@ -265,7 +267,7 @@ export class CheckoutComponent implements OnInit {
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
               next: () => {
-                console.log('[Checkout] Cart cleared');
+                this.logger.info('[Checkout] Cart cleared');
 
                 // 延遲導航，讓用戶看到成功訊息
                 setTimeout(() => {
@@ -280,7 +282,7 @@ export class CheckoutComponent implements OnInit {
                 }, 1500);
               },
               error: (error) => {
-                console.error('[Checkout] Failed to clear cart:', error);
+                this.logger.error('[Checkout] Failed to clear cart:', error);
                 // 即使清空購物車失敗，仍然導航到確認頁面
                 const currentOrder = this.orderService.currentOrder();
                 if (currentOrder) {
@@ -299,7 +301,7 @@ export class CheckoutComponent implements OnInit {
           // 1. 保留訂單為 "待付款" 狀態
           // 2. 自動取消訂單
           // 3. 提供重試支付選項
-          console.error('[Checkout] Payment failed:', error);
+          this.logger.error('[Checkout] Payment failed:', error);
         },
       });
   }

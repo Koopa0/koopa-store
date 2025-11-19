@@ -30,6 +30,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 // Services
 import { OrderService } from '@features/order/services/order.service';
+import { LoggerService } from '@core/services';
 
 // Models
 import { Order, OrderStatus } from '@core/models/order.model';
@@ -63,6 +64,7 @@ export class OrderListComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly orderService = inject(OrderService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
 
   /**
    * 訂單列表 Signal
@@ -174,7 +176,7 @@ export class OrderListComponent implements OnInit {
    */
   trackOrder(orderNumber: string): void {
     // TODO: 實作訂單追蹤功能
-    console.log('Track order:', orderNumber);
+    this.logger.info('Track order:', orderNumber);
   }
 
   /**
@@ -182,7 +184,7 @@ export class OrderListComponent implements OnInit {
    */
   reorder(order: Order): void {
     // TODO: 實作再次購買功能
-    console.log('Reorder:', order.orderNumber);
+    this.logger.info('Reorder:', order.orderNumber);
   }
 
   /**

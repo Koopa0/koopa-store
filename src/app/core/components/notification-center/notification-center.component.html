@@ -3,6 +3,7 @@
   mat-icon-button
   [matMenuTriggerFor]="notificationMenu"
   [matTooltip]="'notification.title' | translate"
+  [attr.aria-label]="hasUnread() ? ('notification.unread_count' | translate) + ': ' + unreadCount() : ('notification.title' | translate)"
   class="notification-button"
 >
   <mat-icon
@@ -10,6 +11,7 @@
     [matBadgeHidden]="!hasUnread()"
     matBadgeColor="warn"
     matBadgeSize="small"
+    [attr.aria-label]="hasUnread() ? ('notification.unread_count' | translate) + ': ' + unreadCount() : ('notification.title' | translate)"
   >
     notifications
   </mat-icon>
@@ -35,6 +37,7 @@
       class="mark-all-button"
       [disabled]="!hasUnread()"
       (click)="onMarkAllAsRead()"
+      [attr.aria-label]="'notification.mark_all_read' | translate"
     >
       {{ 'notification.mark_all_read' | translate }}
     </button>
@@ -55,10 +58,12 @@
   >
     <button
       mat-menu-item
-      *ngFor="let notification of getDisplayNotifications()"
+      *ngFor="let notification of getDisplayNotifications(); trackBy: trackByNotificationId"
       class="notification-item"
       [class.unread]="!notification.isRead"
       (click)="onNotificationClick(notification)"
+      role="menuitem"
+      [attr.aria-label]="('notification.open_notification' | translate) + ': ' + notification.title"
     >
       <!-- 通知圖示 / Notification Icon -->
       <mat-icon
@@ -78,6 +83,7 @@
             mat-icon-button
             class="delete-button"
             (click)="onDeleteNotification($event, notification.id)"
+            [attr.aria-label]="'notification.delete_notification' | translate"
           >
             <mat-icon class="delete-icon">close</mat-icon>
           </button>
@@ -118,6 +124,7 @@
       color="primary"
       class="view-all-button"
       (click)="onViewAll()"
+      [attr.aria-label]="'notification.view_all' | translate"
     >
       {{ 'notification.view_all' | translate }}
     </button>

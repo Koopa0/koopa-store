@@ -146,7 +146,7 @@
             <!-- 評價圖片 / Review Images -->
             @if (review.images && review.images.length > 0) {
               <div class="review-images">
-                @for (image of review.images; track image) {
+                @for (image of review.images; track $index) {
                   <img [src]="image" [alt]="'Review image ' + ($index + 1)" />
                 }
               </div>

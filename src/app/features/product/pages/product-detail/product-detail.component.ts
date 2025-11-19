@@ -34,6 +34,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 // Services and Models
 import { ProductService } from '../../services/product.service';
 import { CartService } from '@features/cart/services/cart.service';
+import { LoggerService } from '@core/services';
 import {
   ProductListItem,
   ProductVariantConfig,
@@ -88,6 +89,7 @@ export class ProductDetailComponent implements OnInit {
   private readonly productService = inject(ProductService);
   private readonly cartService = inject(CartService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
 
   /**
    * 狀態 Signals
@@ -204,7 +206,7 @@ export class ProductDetailComponent implements OnInit {
           this.loadVariantConfig(id);
         },
         error: (err) => {
-          console.error('Failed to load product:', err);
+          this.logger.error('Failed to load product:', err);
           this.error.set('Failed to load product. Please try again.');
           this.loading.set(false);
         },
@@ -235,7 +237,7 @@ export class ProductDetailComponent implements OnInit {
           }
         },
         error: (err) => {
-          console.error('Failed to load variant config:', err);
+          this.logger.error('Failed to load variant config:', err);
           // 變體載入失敗不影響主要功能
         },
       });
@@ -284,7 +286,7 @@ export class ProductDetailComponent implements OnInit {
 
     // 如果商品有變體但用戶尚未選擇，提示用戶選擇
     if (config?.hasVariants && !variant) {
-      console.warn('[ProductDetail] Please select variant options first');
+      this.logger.warn('[ProductDetail] Please select variant options first');
       // TODO: 顯示提示訊息「請先選擇規格」
       return;
     }
@@ -295,7 +297,7 @@ export class ProductDetailComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            console.log('[ProductDetail] Added to cart successfully', {
+            this.logger.info('[ProductDetail] Added to cart successfully', {
               product: prod.name,
               variant: variant?.attributes,
               quantity,
@@ -303,7 +305,7 @@ export class ProductDetailComponent implements OnInit {
             // TODO: 顯示成功訊息
           },
           error: (err) => {
-            console.error('Failed to add to cart:', err);
+            this.logger.error('Failed to add to cart:', err);
             // TODO: 顯示錯誤訊息
           },
         });
@@ -322,7 +324,7 @@ export class ProductDetailComponent implements OnInit {
 
     // 如果商品有變體但用戶尚未選擇，提示用戶選擇
     if (config?.hasVariants && !variant) {
-      console.warn('[ProductDetail] Please select variant options first');
+      this.logger.warn('[ProductDetail] Please select variant options first');
       // TODO: 顯示提示訊息「請先選擇規格」
       return;
     }
@@ -334,7 +336,7 @@ export class ProductDetailComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            console.log('[ProductDetail] Buy now -', {
+            this.logger.info('[ProductDetail] Buy now -', {
               product: prod.name,
               variant: variant?.attributes,
               quantity,
@@ -343,7 +345,7 @@ export class ProductDetailComponent implements OnInit {
             this.router.navigate(['/cart']);
           },
           error: (err) => {
-            console.error('Failed to add to cart:', err);
+            this.logger.error('Failed to add to cart:', err);
             // TODO: 顯示錯誤訊息
           },
         });

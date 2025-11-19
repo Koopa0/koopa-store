@@ -180,6 +180,7 @@
                 mat-icon-button
                 (click)="decreaseQuantity()"
                 [disabled]="(quantityControl.value || 1) <= 1"
+                [attr.aria-label]="'common.decrease_quantity' | translate"
               >
                 <mat-icon>remove</mat-icon>
               </button>
@@ -190,12 +191,14 @@
                   [formControl]="quantityControl"
                   min="1"
                   [max]="product()?.stockQuantity || 999"
+                  [attr.aria-label]="'common.quantity' | translate"
                 />
               </mat-form-field>
               <button
                 mat-icon-button
                 (click)="increaseQuantity()"
                 [disabled]="(quantityControl.value || 1) >= (product()?.stockQuantity || 0)"
+                [attr.aria-label]="'common.increase_quantity' | translate"
               >
                 <mat-icon>add</mat-icon>
               </button>
@@ -220,6 +223,7 @@
               class="add-to-cart-btn"
               (click)="addToCart()"
               [disabled]="!isInStock()"
+              [attr.aria-label]="'product.detail.addToCart' | translate"
             >
               <mat-icon>shopping_cart</mat-icon>
               {{ 'product.detail.addToCart' | translate }}
@@ -230,6 +234,7 @@
               class="buy-now-btn"
               (click)="buyNow()"
               [disabled]="!isInStock()"
+              [attr.aria-label]="'product.detail.buyNow' | translate"
             >
               <mat-icon>flash_on</mat-icon>
               {{ 'product.detail.buyNow' | translate }}

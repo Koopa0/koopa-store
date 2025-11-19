@@ -35,6 +35,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 // 服務和模型
 import { ProductService } from '../../services/product.service';
 import { ProductListItem, ProductListParams } from '@core/models/product.model';
+import { LoggerService } from '@core/services';
 import { TranslateModule } from '@ngx-translate/core';
 
 // 共用元件和管道
@@ -74,6 +75,7 @@ export class ProductListComponent implements OnInit {
    */
   private readonly productService = inject(ProductService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly logger = inject(LoggerService);
 
   /**
    * 商品列表
@@ -194,7 +196,7 @@ export class ProductListComponent implements OnInit {
         this.loading.set(false);
       },
       error: (error) => {
-        console.error('Failed to load products:', error);
+        this.logger.error('Failed to load products:', error);
         this.loading.set(false);
       },
     });
