@@ -83,7 +83,7 @@
     @if (products().length > 0) {
       <div class="product-grid">
         @for (product of products(); track product.id) {
-          <mat-card class="product-card">
+          <mat-card class="product-card" (click)="goToProduct(product.id)">
             <!-- 商品圖片 Product Image -->
             <div class="product-image-container">
               <img

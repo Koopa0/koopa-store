@@ -16,7 +16,7 @@
 import { Component, OnInit, inject, signal, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -78,6 +78,7 @@ export class ProductListComponent implements OnInit {
   private readonly productService = inject(ProductService);
   private readonly cartService = inject(CartService);
   private readonly notificationService = inject(NotificationService);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
 
@@ -269,5 +270,13 @@ export class ProductListComponent implements OnInit {
         );
       },
     });
+  }
+
+  /**
+   * 前往商品詳情
+   * Navigate to product detail
+   */
+  goToProduct(productId: string): void {
+    this.router.navigate(['/products', productId]);
   }
 }
