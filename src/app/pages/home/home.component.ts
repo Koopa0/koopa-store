@@ -21,7 +21,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { TranslateModule } from '@ngx-translate/core';
 
 // Services
-import { LoggerService } from '@core/services';
+import { LoggerService, NotificationService } from '@core/services';
+import { CartService } from '@features/cart/services/cart.service';
 
 // Pipes
 import { CurrencyFormatPipe } from '@shared/pipes';
@@ -48,6 +49,8 @@ import { ProductListItem } from '@core/models';
 export class HomeComponent implements OnInit {
   private readonly logger = inject(LoggerService);
   private readonly router = inject(Router);
+  private readonly cartService = inject(CartService);
+  private readonly notificationService = inject(NotificationService);
 
   /**
    * 精選商品
@@ -279,5 +282,29 @@ export class HomeComponent implements OnInit {
    */
   goToAllProducts(): void {
     this.router.navigate(['/products']);
+  }
+
+  /**
+   * 加入購物車
+   * Add to cart
+   */
+  addToCart(product: ProductListItem, event: Event): void {
+    event.stopPropagation(); // 防止觸發卡片的 click 事件
+
+    this.cartService.addToCart(product, 1).subscribe({
+      next: (cartItem) => {
+        this.notificationService.success(
+          `已將「${product.name}」加入購物車！`,
+          '成功'
+        );
+      },
+      error: (error) => {
+        this.logger.error('Failed to add to cart:', error);
+        this.notificationService.error(
+          '加入購物車失敗，請稍後再試',
+          '錯誤'
+        );
+      },
+    });
   }
 }

@@ -57,9 +57,9 @@
           <mat-card-content>
             <h3 class="product-name">{{ product.name }}</h3>
             <p class="product-price">{{ product.price | currencyFormat:'TWD':'symbol' }}</p>
-            <button mat-button color="primary" class="product-action">
+            <button mat-button color="primary" class="product-action" (click)="addToCart(product, $event)">
               <mat-icon>shopping_cart</mat-icon>
-              查看詳情
+              加入購物車
             </button>
           </mat-card-content>
         </mat-card>
@@ -84,9 +84,9 @@
           <mat-card-content>
             <h3 class="product-name">{{ product.name }}</h3>
             <p class="product-price">{{ product.price | currencyFormat:'TWD':'symbol' }}</p>
-            <button mat-button color="primary" class="product-action">
+            <button mat-button color="primary" class="product-action" (click)="addToCart(product, $event)">
               <mat-icon>shopping_cart</mat-icon>
-              查看詳情
+              加入購物車
             </button>
           </mat-card-content>
         </mat-card>

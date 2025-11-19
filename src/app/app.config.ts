@@ -16,9 +16,14 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
   importProvidersFrom,
+  LOCALE_ID,
 } from '@angular/core';
-import { DatePipe, CurrencyPipe } from '@angular/common';
+import { DatePipe, CurrencyPipe, registerLocaleData } from '@angular/common';
+import localeZhTw from '@angular/common/locales/zh-Hant-TW';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
+
+// Register zh-TW locale data
+registerLocaleData(localeZhTw, 'zh-TW');
 import {
   provideHttpClient,
   withInterceptorsFromDi,
@@ -148,5 +153,14 @@ export const appConfig: ApplicationConfig = {
      */
     DatePipe,
     CurrencyPipe,
+
+    /**
+     * Locale 配置
+     * Locale configuration
+     *
+     * 教學說明：
+     * 提供應用程式的預設語系，確保日期、貨幣等格式正確顯示
+     */
+    { provide: LOCALE_ID, useValue: 'zh-TW' },
   ],
 };

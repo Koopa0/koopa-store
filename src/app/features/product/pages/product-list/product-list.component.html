@@ -167,6 +167,7 @@
                   mat-raised-button
                   color="primary"
                   class="add-to-cart-btn"
+                  (click)="addToCart(product, $event)"
                 >
                   <mat-icon>shopping_cart</mat-icon>
                   {{ 'product.addToCart' | translate }}
