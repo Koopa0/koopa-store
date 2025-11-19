@@ -83,7 +83,7 @@
     @if (products().length > 0) {
       <div class="product-grid">
         @for (product of products(); track product.id) {
-          <mat-card class="product-card">
+          <mat-card class="product-card" (click)="goToProduct(product.id)">
             <!-- 商品圖片 Product Image -->
             <div class="product-image-container">
               <img
@@ -167,6 +167,7 @@
                   mat-raised-button
                   color="primary"
                   class="add-to-cart-btn"
+                  (click)="addToCart(product, $event)"
                 >
                   <mat-icon>shopping_cart</mat-icon>
                   {{ 'product.addToCart' | translate }}

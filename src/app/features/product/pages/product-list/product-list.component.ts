@@ -16,7 +16,7 @@
 import { Component, OnInit, inject, signal, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -34,6 +34,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 // 服務和模型
 import { ProductService } from '../../services/product.service';
+import { CartService } from '@features/cart/services/cart.service';
+import { NotificationService } from '@core/services/notification.service';
 import { ProductListItem, ProductListParams } from '@core/models/product.model';
 import { LoggerService } from '@core/services';
 import { TranslateModule } from '@ngx-translate/core';
@@ -74,6 +76,9 @@ export class ProductListComponent implements OnInit {
    * Inject services
    */
   private readonly productService = inject(ProductService);
+  private readonly cartService = inject(CartService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
 
@@ -241,5 +246,37 @@ export class ProductListComponent implements OnInit {
    */
   hasDiscount(product: ProductListItem): boolean {
     return !!product.comparePrice && product.comparePrice > product.price;
+  }
+
+  /**
+   * 加入購物車
+   * Add to cart
+   */
+  addToCart(product: ProductListItem, event: Event): void {
+    event.stopPropagation(); // 防止觸發卡片的 click 事件
+
+    this.cartService.addToCart(product, 1).subscribe({
+      next: (cartItem) => {
+        this.notificationService.success(
+          `已將「${product.name}」加入購物車！`,
+          '成功'
+        );
+      },
+      error: (error) => {
+        this.logger.error('Failed to add to cart:', error);
+        this.notificationService.error(
+          '加入購物車失敗，請稍後再試',
+          '錯誤'
+        );
+      },
+    });
+  }
+
+  /**
+   * 前往商品詳情
+   * Navigate to product detail
+   */
+  goToProduct(productId: string): void {
+    this.router.navigate(['/products', productId]);
   }
 }
