@@ -1,0 +1,108 @@
+<!--
+  首頁
+  Home Page
+
+  顯示精選商品、最新商品、熱門分類
+  Display featured products, new arrivals, popular categories
+-->
+
+<div class="home-page">
+  <!-- Hero Banner -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">{{ 'home.hero.title' | translate }}</h1>
+      <p class="hero-subtitle">{{ 'home.hero.subtitle' | translate }}</p>
+      <button mat-raised-button color="primary" class="hero-cta" (click)="goToAllProducts()">
+        <mat-icon>shopping_bag</mat-icon>
+        {{ 'home.hero.cta' | translate }}
+      </button>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="categories-section">
+    <div class="section-header">
+      <h2 class="section-title">{{ 'home.categories.title' | translate }}</h2>
+      <p class="section-subtitle">{{ 'home.categories.subtitle' | translate }}</p>
+    </div>
+
+    <div class="categories-grid">
+      @for (category of categories(); track category.id) {
+        <mat-card class="category-card" (click)="goToCategory(category.slug)">
+          <mat-card-content>
+            <div class="category-icon-wrapper">
+              <mat-icon class="category-icon">{{ category.icon }}</mat-icon>
+            </div>
+            <h3 class="category-name">{{ category.name }}</h3>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+  <!-- Featured Products Section -->
+  <section class="products-section featured-section">
+    <div class="section-header">
+      <h2 class="section-title">{{ 'home.featured.title' | translate }}</h2>
+      <p class="section-subtitle">{{ 'home.featured.subtitle' | translate }}</p>
+    </div>
+
+    <div class="products-grid">
+      @for (product of featuredProducts(); track product.id) {
+        <mat-card class="product-card" (click)="goToProduct(product.id)">
+          <div class="product-image-wrapper">
+            <img [src]="product.primaryImageUrl" [alt]="product.name" class="product-image">
+            <mat-chip class="featured-badge">精選</mat-chip>
+          </div>
+          <mat-card-content>
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-price">{{ product.price | currencyFormat:'TWD':'symbol' }}</p>
+            <button mat-button color="primary" class="product-action">
+              <mat-icon>shopping_cart</mat-icon>
+              查看詳情
+            </button>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+  <!-- New Arrivals Section -->
+  <section class="products-section new-arrivals-section">
+    <div class="section-header">
+      <h2 class="section-title">{{ 'home.newArrivals.title' | translate }}</h2>
+      <p class="section-subtitle">{{ 'home.newArrivals.subtitle' | translate }}</p>
+    </div>
+
+    <div class="products-grid">
+      @for (product of newArrivals(); track product.id) {
+        <mat-card class="product-card" (click)="goToProduct(product.id)">
+          <div class="product-image-wrapper">
+            <img [src]="product.primaryImageUrl" [alt]="product.name" class="product-image">
+            <mat-chip class="new-badge">新品</mat-chip>
+          </div>
+          <mat-card-content>
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-price">{{ product.price | currencyFormat:'TWD':'symbol' }}</p>
+            <button mat-button color="primary" class="product-action">
+              <mat-icon>shopping_cart</mat-icon>
+              查看詳情
+            </button>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2 class="cta-title">探索更多商品</h2>
+      <p class="cta-subtitle">數千種精選商品等你發現</p>
+      <button mat-raised-button color="accent" class="cta-button" (click)="goToAllProducts()">
+        <mat-icon>explore</mat-icon>
+        瀏覽所有商品
+      </button>
+    </div>
+  </section>
+</div>

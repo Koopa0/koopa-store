@@ -102,78 +102,76 @@
     }
   },
   "product": {
-    "title": "商品",
-    "all_products": "所有商品",
-    "featured_products": "精選商品",
-    "new_arrivals": "新品上架",
-    "best_sellers": "熱銷商品",
-    "on_sale": "特價商品",
-    "search_placeholder": "搜尋商品...",
-    "price": "價格",
-    "price_range": "價格範圍",
-    "category": "分類",
-    "brand": "品牌",
-    "rating": "評分",
-    "in_stock": "有庫存",
-    "out_of_stock": "缺貨",
-    "low_stock": "庫存不足",
-    "stock": "庫存",
-    "sku": "商品編號",
-    "description": "商品描述",
-    "specifications": "規格",
-    "reviews": "評論",
-    "related_products": "相關商品",
-    "add_to_cart": "加入購物車",
-    "buy_now": "立即購買",
-    "add_to_wishlist": "加入願望清單",
-    "compare": "比較",
-    "share": "分享",
-    "quantity": "數量",
-    "select_variant": "選擇規格",
-    "original_price": "原價",
-    "sale_price": "特價",
-    "save": "省下",
-    "free_shipping": "免運費",
-    "delivery_time": "配送時間",
-    "return_policy": "退貨政策",
-    "variant": {
-      "select": "選擇規格",
+    "list": {
+      "title": "商品列表",
+      "subtitle": "探索我們精選的優質商品",
+      "search": "搜尋商品",
+      "searchPlaceholder": "請輸入商品名稱或關鍵字...",
+      "sortBy": "排序方式",
+      "ascending": "升冪排序",
+      "descending": "降冪排序",
+      "noProducts": "找不到商品",
+      "noProductsDesc": "目前沒有符合條件的商品，請嘗試調整搜尋條件",
+      "clearSearch": "清除搜尋"
+    },
+    "detail": {
+      "title": "商品詳情",
+      "sku": "商品編號",
+      "brand": "品牌",
+      "category": "分類",
       "price": "價格",
+      "total": "總計",
+      "quantity": "數量",
       "stock": "庫存",
-      "in_stock": "件",
-      "out_of_stock": "無庫存",
-      "please_select_all": "請選擇所有規格選項"
-    }
+      "inStock": "有貨",
+      "outOfStock": "缺貨",
+      "lowStock": "庫存不足",
+      "sold": "已售出",
+      "reviews": "評價",
+      "addToCart": "加入購物車",
+      "buyNow": "立即購買",
+      "backToList": "返回商品列表",
+      "error": "載入商品失敗",
+      "descriptionPlaceholder": "此商品暫無詳細說明，更多資訊請洽客服",
+      "reviewsPlaceholder": "此商品暫無評價，成為第一個評價的顧客吧！",
+      "tabs": {
+        "description": "商品說明",
+        "specifications": "規格資訊",
+        "reviews": "顧客評價"
+      }
+    },
+    "featured": "精選",
+    "new": "新品",
+    "sale": "特價",
+    "sold": "已售",
+    "rating": "評分",
+    "reviews": "評價",
+    "addToCart": "加入購物車",
+    "buyNow": "立即購買",
+    "viewDetails": "查看詳情",
+    "category": "分類",
+    "price": "價格",
+    "originalPrice": "原價",
+    "discount": "折扣",
+    "tag": "標籤"
   },
   "cart": {
     "title": "購物車",
-    "empty": "您的購物車是空的",
-    "continue_shopping": "繼續購物",
-    "item": "項目",
-    "items": "項目",
-    "product": "商品",
-    "price": "單價",
-    "quantity": "數量",
-    "subtotal": "小計",
-    "total": "總計",
-    "tax": "稅額",
-    "shipping": "運費",
-    "discount": "折扣",
-    "estimated_total": "預估總額",
-    "apply_coupon": "使用優惠券",
-    "coupon_code": "優惠券代碼",
-    "apply": "套用",
-    "remove": "移除",
-    "update": "更新",
-    "clear_cart": "清空購物車",
-    "checkout": "結帳",
-    "save_for_later": "稍後購買",
-    "move_to_cart": "移至購物車",
-    "added_to_cart": "已加入購物車",
-    "removed_from_cart": "已從購物車移除",
-    "updated": "購物車已更新",
-    "invalid_coupon": "無效的優惠券代碼",
-    "coupon_applied": "優惠券已套用"
+    "empty": "購物車是空的",
+    "emptyDescription": "還沒有加入任何商品，快去逛逛吧！",
+    "items": "商品",
+    "clearCart": "清空購物車",
+    "continueShopping": "繼續購物",
+    "checkout": "前往結帳",
+    "outOfStock": "此商品已缺貨",
+    "priceChanged": "商品價格已變更",
+    "summary": {
+      "title": "訂單摘要",
+      "subtotal": "小計",
+      "tax": "稅額",
+      "shipping": "運費",
+      "total": "總計"
+    }
   },
   "order": {
     "title": "訂單",
@@ -353,78 +351,6 @@
     "TWD": "NT$",
     "USD": "US$",
     "symbol": "NT$"
-  },
-  "product": {
-    "list": {
-      "title": "商品列表",
-      "subtitle": "探索我們精選的優質商品",
-      "search": "搜尋商品",
-      "searchPlaceholder": "請輸入商品名稱或關鍵字...",
-      "sortBy": "排序方式",
-      "ascending": "升冪排序",
-      "descending": "降冪排序",
-      "noProducts": "找不到商品",
-      "noProductsDesc": "目前沒有符合條件的商品，請嘗試調整搜尋條件",
-      "clearSearch": "清除搜尋"
-    },
-    "detail": {
-      "title": "商品詳情",
-      "sku": "商品編號",
-      "brand": "品牌",
-      "category": "分類",
-      "price": "價格",
-      "total": "總計",
-      "quantity": "數量",
-      "stock": "庫存",
-      "inStock": "有貨",
-      "outOfStock": "缺貨",
-      "lowStock": "庫存不足",
-      "sold": "已售出",
-      "reviews": "評價",
-      "addToCart": "加入購物車",
-      "buyNow": "立即購買",
-      "backToList": "返回商品列表",
-      "error": "載入商品失敗",
-      "descriptionPlaceholder": "此商品暫無詳細說明，更多資訊請洽客服",
-      "reviewsPlaceholder": "此商品暫無評價，成為第一個評價的顧客吧！",
-      "tabs": {
-        "description": "商品說明",
-        "specifications": "規格資訊",
-        "reviews": "顧客評價"
-      }
-    },
-    "featured": "精選",
-    "new": "新品",
-    "sale": "特價",
-    "sold": "已售",
-    "rating": "評分",
-    "reviews": "評價",
-    "addToCart": "加入購物車",
-    "buyNow": "立即購買",
-    "viewDetails": "查看詳情",
-    "category": "分類",
-    "price": "價格",
-    "originalPrice": "原價",
-    "discount": "折扣",
-    "tag": "標籤"
-  },
-  "cart": {
-    "title": "購物車",
-    "empty": "購物車是空的",
-    "emptyDescription": "還沒有加入任何商品，快去逛逛吧！",
-    "items": "商品",
-    "clearCart": "清空購物車",
-    "continueShopping": "繼續購物",
-    "checkout": "前往結帳",
-    "outOfStock": "此商品已缺貨",
-    "priceChanged": "商品價格已變更",
-    "summary": {
-      "title": "訂單摘要",
-      "subtotal": "小計",
-      "tax": "稅額",
-      "shipping": "運費",
-      "total": "總計"
-    }
   },
   "checkout": {
     "title": "結帳",
@@ -705,6 +631,25 @@
       "normal": "一般",
       "high": "高",
       "urgent": "緊急"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "探索精選商品",
+      "subtitle": "發現最新科技產品與生活精品",
+      "cta": "立即購物"
+    },
+    "categories": {
+      "title": "熱門分類",
+      "subtitle": "探索不同的商品類別"
+    },
+    "featured": {
+      "title": "精選商品",
+      "subtitle": "為您精心挑選的優質商品"
+    },
+    "newArrivals": {
+      "title": "最新上架",
+      "subtitle": "搶先體驗最新商品"
     }
   }
 }
