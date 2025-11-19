@@ -50,15 +50,12 @@ export const routes: Routes = [
   /**
    * 首頁路由（需要登入）
    * Home route (requires authentication)
-   *
-   * 教學說明：暫時使用 App 元件作為主頁面
-   * 實際應用中應該建立專門的 HomePage 元件
    */
   {
     path: 'home',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./app').then((m) => m.App),
+      import('./pages/home/home.component').then((m) => m.HomeComponent),
   },
 
   /**
@@ -83,6 +80,31 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/product/pages/product-detail/product-detail.component').then(
             (m) => m.ProductDetailComponent
+          ),
+      },
+    ],
+  },
+
+  /**
+   * 分類路由
+   * Categories route
+   */
+  {
+    path: 'categories',
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/product/pages/product-list/product-list.component').then(
+            (m) => m.ProductListComponent
+          ),
+      },
+      {
+        path: ':slug',
+        loadComponent: () =>
+          import('./features/product/pages/product-list/product-list.component').then(
+            (m) => m.ProductListComponent
           ),
       },
     ],

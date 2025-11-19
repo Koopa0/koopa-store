@@ -1,0 +1,352 @@
+/**
+ * 首頁樣式
+ * Home Page Styles
+ *
+ * 參考 Google Store 的現代簡潔設計
+ * Inspired by Google Store's modern clean design
+ */
+
+.home-page {
+  min-height: 100vh;
+  background-color: var(--background);
+}
+
+/**
+ * Hero Section
+ */
+.hero-section {
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+  color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 70%
+    );
+    animation: float 20s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+      transform: translate(30px, -30px) rotate(5deg);
+    }
+    66% {
+      transform: translate(-20px, 20px) rotate(-5deg);
+    }
+  }
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+.hero-cta {
+  font-size: 1.125rem;
+  padding: 0.75rem 2rem;
+  height: auto;
+
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+/**
+ * Section Common Styles
+ */
+.categories-section,
+.products-section,
+.cta-section {
+  padding: 4rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+  }
+}
+
+.section-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+}
+
+/**
+ * Categories Grid
+ */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+.category-card {
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-align: center;
+  padding: 2rem 1rem;
+
+  mat-card-content {
+    padding: 0;
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+
+    .category-icon {
+      transform: scale(1.1);
+      color: var(--primary-color);
+    }
+  }
+}
+
+.category-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+  border-radius: var(--radius-full);
+}
+
+.category-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: var(--primary-600);
+  transition: all var(--transition-normal);
+}
+
+.category-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/**
+ * Products Grid
+ */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.product-card {
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+
+    .product-image {
+      transform: scale(1.05);
+    }
+
+    .product-action {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  background-color: var(--gray-100);
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.featured-badge,
+.new-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-weight: 600;
+  font-size: 0.813rem;
+  z-index: 1;
+}
+
+.featured-badge {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.new-badge {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+.product-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0 0 1rem 0;
+}
+
+.product-action {
+  width: 100%;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all var(--transition-normal);
+
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+/**
+ * Featured Section
+ */
+.featured-section {
+  background: linear-gradient(to bottom, var(--gray-50) 0%, var(--background) 100%);
+}
+
+/**
+ * CTA Section
+ */
+.cta-section {
+  background: linear-gradient(135deg, var(--accent-500) 0%, var(--accent-700) 100%);
+  color: white;
+  text-align: center;
+  padding: 5rem 2rem;
+  margin-top: 4rem;
+}
+
+.cta-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+  }
+}
+
+.cta-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+.cta-button {
+  font-size: 1.125rem;
+  padding: 0.75rem 2rem;
+  height: auto;
+
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+/**
+ * Dark Theme
+ */
+.dark-theme {
+  .category-icon-wrapper {
+    background: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-800) 100%);
+  }
+
+  .featured-section {
+    background: linear-gradient(to bottom, var(--gray-900) 0%, var(--background) 100%);
+  }
+
+  .product-image-wrapper {
+    background-color: var(--gray-800);
+  }
+}
