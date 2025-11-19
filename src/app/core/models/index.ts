@@ -29,3 +29,6 @@ export * from './review.model';
 
 // 庫存相關模型 / Inventory-related models
 export * from './inventory.model';
+
+// 通知相關模型 / Notification-related models
+export * from './notification.model';
