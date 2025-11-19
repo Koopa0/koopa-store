@@ -41,7 +41,11 @@ import {
 } from '@core/models/product.model';
 
 // Shared Components
-import { VariantSelectorComponent } from '@shared/components';
+import {
+  VariantSelectorComponent,
+  ImageCarouselComponent,
+  ReviewListComponent,
+} from '@shared/components';
 
 // Pipes
 import { TranslateModule } from '@ngx-translate/core';
@@ -67,6 +71,8 @@ import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
     TranslateModule,
     CurrencyFormatPipe,
     VariantSelectorComponent,
+    ImageCarouselComponent,
+    ReviewListComponent,
   ],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
@@ -153,6 +159,15 @@ export class ProductDetailComponent implements OnInit {
     return Math.round(
       ((prod.comparePrice - prod.price) / prod.comparePrice) * 100
     );
+  });
+
+  public readonly productImages = computed(() => {
+    const prod = this.product();
+    if (!prod) return [];
+    // 如果有多張圖片，可以在這裡擴展
+    // For now, just return the primary image
+    // Filter out undefined values to ensure type safety
+    return [prod.primaryImageUrl].filter((img): img is string => !!img);
   });
 
   /**

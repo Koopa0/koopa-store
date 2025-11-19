@@ -571,5 +571,58 @@
       "update_failed": "更新地址失敗",
       "delete_failed": "刪除地址失敗"
     }
+  },
+  "review": {
+    "title": "商品評價",
+    "total_reviews": "則評價",
+    "verified_purchase": "已驗證購買",
+    "verified_only": "僅顯示驗證購買",
+    "with_images_only": "有圖片的評價",
+    "write_review": "撰寫評價",
+    "edit_review": "編輯評價",
+    "delete_review": "刪除評價",
+    "helpful": "有幫助",
+    "no_reviews": "目前尚無評價",
+    "no_reviews_description": "成為第一位評價的顧客吧！",
+    "load_more": "載入更多評價",
+    "sort_by": "排序方式",
+    "sort": {
+      "newest": "最新評價",
+      "highest": "評分最高",
+      "lowest": "評分最低",
+      "helpful": "最有幫助"
+    },
+    "filter": {
+      "all": "所有評價",
+      "rating": "{{rating}} 星"
+    },
+    "form": {
+      "rating": "評分",
+      "title": "評價標題",
+      "title_placeholder": "請簡短描述您的購買體驗",
+      "content": "評價內容",
+      "content_placeholder": "請詳細描述您對商品的評價，幫助其他買家做出決定",
+      "images": "上傳圖片",
+      "add_images": "新增圖片",
+      "images_hint": "最多可上傳 5 張圖片，支援 JPG、PNG 格式",
+      "chars_remaining": "個剩餘字元",
+      "submit": "送出評價",
+      "error": {
+        "rating_required": "請選擇評分",
+        "title_required": "請輸入評價標題",
+        "title_too_short": "標題至少需要 5 個字元",
+        "content_required": "請輸入評價內容",
+        "content_too_short": "內容至少需要 10 個字元"
+      }
+    },
+    "notification": {
+      "submitted": "評價已送出",
+      "updated": "評價已更新",
+      "deleted": "評價已刪除",
+      "marked_helpful": "已標記為有幫助",
+      "submit_failed": "送出評價失敗",
+      "update_failed": "更新評價失敗",
+      "delete_failed": "刪除評價失敗"
+    }
   }
 }

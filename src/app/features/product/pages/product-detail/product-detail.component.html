@@ -59,12 +59,13 @@
       <div class="product-main">
         <!-- 左側：商品圖片 Left: Product Images -->
         <div class="product-images">
-          <div class="main-image">
-            <img
-              [src]="selectedImage()"
-              [alt]="product()?.name"
-              class="product-image"
-            />
+          <div class="image-carousel-wrapper">
+            <!-- 圖片輪播 Image Carousel -->
+            <app-image-carousel
+              [images]="productImages()"
+              [showThumbnails]="true"
+              [height]="'500px'"
+            ></app-image-carousel>
 
             <!-- 折扣標籤 Discount Badge -->
             @if (hasDiscount()) {
@@ -280,23 +281,8 @@
         <!-- 評價 Reviews Tab -->
         <mat-tab [label]="'product.detail.tabs.reviews' | translate">
           <div class="tab-content">
-            <h3>{{ 'product.detail.tabs.reviews' | translate }}</h3>
-            <div class="reviews-summary">
-              <div class="rating-overview">
-                <div class="rating-score">{{ product()?.ratingAverage }}</div>
-                <div class="rating-stars">
-                  <mat-icon class="star-icon">star</mat-icon>
-                  <mat-icon class="star-icon">star</mat-icon>
-                  <mat-icon class="star-icon">star</mat-icon>
-                  <mat-icon class="star-icon">star</mat-icon>
-                  <mat-icon class="star-icon">star_half</mat-icon>
-                </div>
-                <div class="review-count">{{ product()?.reviewCount }} {{ 'product.detail.reviews' | translate }}</div>
-              </div>
-            </div>
-            <p class="placeholder-text">
-              {{ 'product.detail.reviewsPlaceholder' | translate }}
-            </p>
+            <!-- 評價列表組件 Review List Component -->
+            <app-review-list [productId]="product()!.id"></app-review-list>
           </div>
         </mat-tab>
       </mat-tab-group>

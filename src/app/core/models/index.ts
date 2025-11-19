@@ -23,3 +23,6 @@ export * from './order.model';
 
 // 購物車相關模型 / Cart-related models
 export * from './cart.model';
+
+// 評價相關模型 / Review-related models
+export * from './review.model';
