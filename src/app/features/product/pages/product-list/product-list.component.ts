@@ -13,7 +13,7 @@
  * 5. 路由導航
  */
 
-import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, signal, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -43,6 +43,7 @@ import { CurrencyFormatPipe, TruncatePipe } from '@shared/pipes';
 @Component({
   selector: 'app-product-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterLink,

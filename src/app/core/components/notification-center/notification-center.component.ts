@@ -12,7 +12,7 @@
  * 4. 標記已讀功能
  */
 
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -40,6 +40,7 @@ import {
 @Component({
   selector: 'app-notification-center',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     MatIconModule,

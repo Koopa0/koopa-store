@@ -13,7 +13,7 @@
  * 5. 路由導航
  */
 
-import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -48,6 +48,7 @@ import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
 @Component({
   selector: 'app-checkout',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterLink,
@@ -259,19 +260,34 @@ export class CheckoutComponent implements OnInit {
           this.notificationService.success('支付成功！');
 
           // 清空購物車
-          this.cartService.clearCart();
+          this.cartService
+            .clearCart()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+              next: () => {
+                console.log('[Checkout] Cart cleared');
 
-          // 延遲導航，讓用戶看到成功訊息
-          setTimeout(() => {
-            // 從 OrderService 取得當前訂單號碼
-            const currentOrder = this.orderService.currentOrder();
-            if (currentOrder) {
-              this.router.navigate(['/order-confirmation', currentOrder.orderNumber]);
-            } else {
-              // Fallback: 導航到訂單列表
-              this.router.navigate(['/orders']);
-            }
-          }, 1500);
+                // 延遲導航，讓用戶看到成功訊息
+                setTimeout(() => {
+                  // 從 OrderService 取得當前訂單號碼
+                  const currentOrder = this.orderService.currentOrder();
+                  if (currentOrder) {
+                    this.router.navigate(['/order-confirmation', currentOrder.orderNumber]);
+                  } else {
+                    // Fallback: 導航到訂單列表
+                    this.router.navigate(['/orders']);
+                  }
+                }, 1500);
+              },
+              error: (error) => {
+                console.error('[Checkout] Failed to clear cart:', error);
+                // 即使清空購物車失敗，仍然導航到確認頁面
+                const currentOrder = this.orderService.currentOrder();
+                if (currentOrder) {
+                  this.router.navigate(['/order-confirmation', currentOrder.orderNumber]);
+                }
+              },
+            });
         },
         error: (error) => {
           this.processing.set(false);

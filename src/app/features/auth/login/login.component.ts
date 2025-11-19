@@ -13,7 +13,7 @@
  * 5. Angular Material 表單元件
  */
 
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
@@ -22,6 +22,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -42,6 +43,7 @@ import { LoginRequest } from '@core/models/user.model';
 @Component({
   selector: 'app-login',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -68,6 +70,7 @@ export class LoginComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly loadingService = inject(LoadingService);
   private readonly notificationService = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
 
   /**
    * 登入表單
@@ -141,28 +144,29 @@ export class LoginComponent implements OnInit {
     console.log('[LoginComponent] Logging in:', credentials.emailOrUsername);
 
     // 呼叫登入服務
-    this.authService.login(credentials).subscribe({
-      next: (response) => {
-        console.log('[LoginComponent] Login successful');
+    this.authService
+      .login(credentials)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          console.log('[LoginComponent] Login successful');
 
-        // 顯示成功通知
-        this.notificationService.success('auth.login.success');
+          // 顯示成功通知
+          this.notificationService.success('auth.login.success');
 
-        // 導向返回 URL 或首頁
-        this.router.navigate([this.returnUrl]);
-      },
-      error: (error) => {
-        console.error('[LoginComponent] Login failed:', error);
+          // 導向返回 URL 或首頁
+          this.router.navigate([this.returnUrl]);
+        },
+        error: (error) => {
+          console.error('[LoginComponent] Login failed:', error);
 
-        // 設定錯誤訊息
-        this.errorMessage.set(error.message || '登入失敗，請稍後再試');
+          // 設定錯誤訊息
+          this.errorMessage.set(error.message || '登入失敗，請稍後再試');
 
-        // 顯示錯誤通知
-        this.notificationService.error(
-          error.message || 'auth.login.error'
-        );
-      },
-    });
+          // 顯示錯誤通知
+          this.notificationService.error(error.message || 'auth.login.error');
+        },
+      });
   }
 
   /**

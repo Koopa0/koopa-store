@@ -182,14 +182,19 @@ export class HeaderComponent {
    * Logout
    */
   async logout(): Promise<void> {
-    const confirmed = await this.notificationService.confirm(
-      'auth.logout.confirm',
-      'common.confirm'
-    );
+    try {
+      const confirmed = await this.notificationService.confirm(
+        'auth.logout.confirm',
+        'common.confirm'
+      );
 
-    if (confirmed) {
-      this.authService.logout();
-      this.notificationService.success('auth.logout.success');
+      if (confirmed) {
+        this.authService.logout();
+        this.notificationService.success('auth.logout.success');
+      }
+    } catch (error) {
+      console.error('[Header] Logout error:', error);
+      this.notificationService.error('common.error');
     }
   }
 

@@ -13,7 +13,7 @@
  * 5. 錯誤處理 (Error handling)
  */
 
-import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -54,6 +54,7 @@ import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
 @Component({
   selector: 'app-product-detail',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterLink,

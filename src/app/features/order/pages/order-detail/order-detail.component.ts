@@ -13,7 +13,8 @@
  * 5. 詳細資訊展示
  */
 
-import { Component, OnInit, inject, computed } from '@angular/core';
+import { Component, OnInit, inject, computed, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -37,6 +38,7 @@ import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
 @Component({
   selector: 'app-order-detail',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterLink,
@@ -58,6 +60,7 @@ export class OrderDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly orderService = inject(OrderService);
   private readonly notificationService = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
 
   /**
    * 訂單 ID（從路由參數取得）
@@ -117,18 +120,20 @@ export class OrderDetailComponent implements OnInit {
    * 載入訂單詳情
    */
   private loadOrder(orderId: string): void {
-    this.orderService.getOrder(orderId).subscribe({
-      next: (order) => {
-        console.log('[OrderDetail] Order loaded:', order);
-      },
-      error: (error) => {
-        console.error('[OrderDetail] Failed to load order:', error);
-        // 如果訂單不存在，導航回訂單列表
-        setTimeout(() => {
-          this.router.navigate(['/orders']);
-        }, 3000);
-      },
-    });
+    this.orderService.getOrder(orderId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (order) => {
+          console.log('[OrderDetail] Order loaded:', order);
+        },
+        error: (error) => {
+          console.error('[OrderDetail] Failed to load order:', error);
+          // 如果訂單不存在，導航回訂單列表
+          setTimeout(() => {
+            this.router.navigate(['/orders']);
+          }, 3000);
+        },
+      });
   }
 
   /**
@@ -148,16 +153,18 @@ export class OrderDetailComponent implements OnInit {
     // TODO: 實作確認對話框
     if (!confirm('確定要取消此訂單嗎？')) return;
 
-    this.orderService.cancelOrder(order.id).subscribe({
-      next: () => {
-        this.notificationService.success('訂單已取消');
-        // 重新載入訂單
-        this.loadOrder(order.id);
-      },
-      error: (error) => {
-        this.notificationService.error('取消訂單失敗: ' + error.message);
-      },
-    });
+    this.orderService.cancelOrder(order.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notificationService.success('訂單已取消');
+          // 重新載入訂單
+          this.loadOrder(order.id);
+        },
+        error: (error) => {
+          this.notificationService.error('取消訂單失敗: ' + error.message);
+        },
+      });
   }
 
   /**

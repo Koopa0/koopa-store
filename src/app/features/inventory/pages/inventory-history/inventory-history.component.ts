@@ -12,7 +12,7 @@
  * 4. 分頁處理
  */
 
-import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, signal, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -50,6 +50,7 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-inventory-history',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     ReactiveFormsModule,

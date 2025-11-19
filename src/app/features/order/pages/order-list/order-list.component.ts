@@ -13,7 +13,7 @@
  * 5. 響應式列表設計
  */
 
-import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, signal, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -41,6 +41,7 @@ import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
 @Component({
   selector: 'app-order-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterLink,
