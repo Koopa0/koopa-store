@@ -29,7 +29,6 @@ describe('AuthService', () => {
     email: 'admin@koopa.com',
     username: 'admin',
     fullName: '系統管理員',
-        confirmPassword: 'password123',
     role: UserRole.ADMIN,
     phone: '0912-345-678',
     avatarUrl: 'https://i.pravatar.cc/150?img=1',
