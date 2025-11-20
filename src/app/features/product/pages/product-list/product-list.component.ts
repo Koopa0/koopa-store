@@ -16,7 +16,7 @@
 import { Component, OnInit, inject, signal, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -85,6 +85,7 @@ export class ProductListComponent implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   private readonly logger = inject(LoggerService);
 
@@ -171,8 +172,17 @@ export class ProductListComponent implements OnInit {
    * Initialize
    */
   ngOnInit(): void {
-    // 載入商品
-    this.loadProducts();
+    // 監聽路由參數（用於分類篩選）
+    this.route.params
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        const categorySlug = params['slug'];
+        if (categorySlug) {
+          // 從 URL 設定分類
+          this.selectedCategory.set(categorySlug);
+        }
+        this.loadProducts();
+      });
 
     // 監聽搜尋輸入
     this.searchControl.valueChanges

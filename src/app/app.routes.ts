@@ -183,15 +183,41 @@ export const routes: Routes = [
   },
 
   /**
-   * 管理後台路由（需要管理員權限）
-   * Admin routes (requires ADMIN role)
+   * 個人資料路由
+   * Profile routes
    */
-  // {
-  //   path: 'admin',
-  //   canActivate: [authGuard, roleGuard],
-  //   data: { roles: ['ADMIN'] },
-  //   loadChildren: () => import('./features/admin/admin.routes'),
-  // },
+  {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/user/pages/address-management/address-management.component').then(
+        (m) => m.AddressManagementComponent
+      ),
+  },
+
+  /**
+   * 設定路由
+   * Settings route
+   */
+  {
+    path: 'settings',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/user/pages/address-management/address-management.component').then(
+        (m) => m.AddressManagementComponent
+      ),
+  },
+
+  /**
+   * 管理後台路由
+   * Admin route (placeholder)
+   */
+  {
+    path: 'admin',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/home/home.component').then((m) => m.HomeComponent),
+  },
 
   /**
    * 404 頁面
