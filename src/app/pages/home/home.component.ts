@@ -92,7 +92,7 @@ export class HomeComponent implements OnInit {
     // 現在使用模擬數據
     const mockProducts: ProductListItem[] = [
       {
-        id: 'prod-1',
+        id: '1',
         name: 'iPhone 15 Pro',
         slug: 'iphone-15-pro',
         sku: 'APPLE-IP15P-128',
@@ -111,7 +111,7 @@ export class HomeComponent implements OnInit {
         updatedAt: new Date(),
       },
       {
-        id: 'prod-2',
+        id: '3',
         name: 'MacBook Pro 14"',
         slug: 'macbook-pro-14',
         sku: 'APPLE-MBP14-512',
@@ -130,7 +130,7 @@ export class HomeComponent implements OnInit {
         updatedAt: new Date(),
       },
       {
-        id: 'prod-3',
+        id: '4',
         name: 'AirPods Pro 2',
         slug: 'airpods-pro-2',
         sku: 'APPLE-APP2-WHITE',
@@ -149,7 +149,7 @@ export class HomeComponent implements OnInit {
         updatedAt: new Date(),
       },
       {
-        id: 'prod-4',
+        id: '2',
         name: 'Apple Watch Series 9',
         slug: 'apple-watch-9',
         sku: 'APPLE-AWS9-GPS',
@@ -180,7 +180,7 @@ export class HomeComponent implements OnInit {
     // TODO: 從 API 載入實際數據
     const mockProducts: ProductListItem[] = [
       {
-        id: 'prod-5',
+        id: '5',
         name: 'iPad Air',
         slug: 'ipad-air',
         sku: 'APPLE-IPA-64',
@@ -199,7 +199,7 @@ export class HomeComponent implements OnInit {
         updatedAt: new Date(),
       },
       {
-        id: 'prod-6',
+        id: '1',
         name: 'Magic Keyboard',
         slug: 'magic-keyboard',
         sku: 'APPLE-MK-WHITE',
@@ -218,7 +218,7 @@ export class HomeComponent implements OnInit {
         updatedAt: new Date(),
       },
       {
-        id: 'prod-7',
+        id: '3',
         name: 'HomePod mini',
         slug: 'homepod-mini',
         sku: 'APPLE-HPM-BLACK',
@@ -237,7 +237,7 @@ export class HomeComponent implements OnInit {
         updatedAt: new Date(),
       },
       {
-        id: 'prod-8',
+        id: '2',
         name: 'AirTag 4 pack',
         slug: 'airtag-4pack',
         sku: 'APPLE-AT-4PK',
