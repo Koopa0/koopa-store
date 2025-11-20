@@ -29,6 +29,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
 
 // Services
 import { CartService } from '@features/cart/services/cart.service';
@@ -64,6 +65,7 @@ import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
     MatDividerModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatChipsModule,
     TranslateModule,
     CurrencyFormatPipe,
   ],
@@ -87,6 +89,16 @@ export class CheckoutComponent implements OnInit {
   readonly cartItems = this.cartService.cartItems;
   readonly subtotal = this.cartService.subtotal;
   readonly itemsCount = this.cartService.itemsCount;
+
+  /**
+   * 已儲存的地址列表
+   */
+  readonly savedAddresses = this.addressService.addresses;
+
+  /**
+   * 選中的地址 ID
+   */
+  readonly selectedAddressId = signal<string | null>(null);
 
   /**
    * 訂單金額計算 Signals
@@ -219,13 +231,82 @@ export class CheckoutComponent implements OnInit {
             });
 
             this.notificationService.info('已自動填入您的預設地址');
+            // 設定選中的地址 ID
+            this.selectedAddressId.set(address.id);
           }
         },
         error: (error) => {
           this.logger.error('[Checkout] Failed to load default address:', error);
           // 不顯示錯誤訊息，讓用戶手動填寫即可
+          // 預設選中"新增地址"
+          this.selectedAddressId.set('new');
         },
       });
+  }
+
+  /**
+   * 選擇地址
+   * Select address
+   */
+  selectAddress(addressId: string): void {
+    this.selectedAddressId.set(addressId);
+
+    if (addressId === 'new') {
+      // 清空表單讓用戶輸入新地址
+      this.shippingForm.reset();
+      return;
+    }
+
+    // 找到選中的地址並填入表單
+    const address = this.savedAddresses().find(a => a.id === addressId);
+    if (address) {
+      const phoneNumber = address.recipientPhone.replace(/-/g, '');
+
+      this.shippingForm.patchValue({
+        recipientName: address.recipientName,
+        recipientPhone: phoneNumber,
+        postalCode: address.postalCode,
+        city: address.city,
+        district: address.district,
+        streetAddress: address.streetAddress,
+        buildingFloor: address.buildingFloor || '',
+      });
+
+      this.notificationService.success('已填入所選地址');
+    }
+  }
+
+  /**
+   * 取得地址圖示
+   * Get address icon
+   */
+  getAddressIcon(label: string): string {
+    switch (label) {
+      case 'home':
+        return 'home';
+      case 'office':
+        return 'business';
+      default:
+        return 'place';
+    }
+  }
+
+  /**
+   * 取得地址標籤
+   * Get address label
+   */
+  getAddressLabel(address: any): string {
+    if (address.customLabel) {
+      return address.customLabel;
+    }
+    switch (address.label) {
+      case 'home':
+        return '家裡';
+      case 'office':
+        return '公司';
+      default:
+        return '其他';
+    }
   }
 
   /**
