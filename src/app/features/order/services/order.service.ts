@@ -423,8 +423,14 @@ export class OrderService {
     const shippingFee = subtotal >= 1000 ? 0 : 100; // 滿千免運
     const taxAmount = Math.round(subtotal * 0.05); // 5% 稅
 
+    // 先生成 orderId 以避免循環引用
+    const orderId = crypto.randomUUID();
+
+    // 更新所有訂單項目的 orderId
+    const orderItems = mockItems.map(item => ({ ...item, orderId }));
+
     const order: OrderDetail = {
-      id: crypto.randomUUID(),
+      id: orderId,
       orderNumber,
       userId: 'mock-user-id', // TODO: 從 AuthService 取得
       status: OrderStatus.PENDING,
@@ -450,7 +456,7 @@ export class OrderService {
       version: 1,
       createdAt: now,
       updatedAt: now,
-      items: mockItems.map(item => ({ ...item, orderId: order.id })),
+      items: orderItems,
     };
 
     // 儲存到 Mock 資料庫

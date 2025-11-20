@@ -48,25 +48,26 @@ export const routes: Routes = [
   },
 
   /**
-   * 首頁路由（需要登入）
-   * Home route (requires authentication)
+   * 首頁路由（公開訪問）
+   * Home route (public access)
+   *
+   * 教學說明：電商首頁應該公開，不需要登入
    */
   {
     path: 'home',
-    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/home/home.component').then((m) => m.HomeComponent),
   },
 
   /**
-   * 商品路由
-   * Product routes
+   * 商品路由（公開訪問）
+   * Product routes (public access)
    *
-   * 教學說明：懶載入商品相關元件
+   * 教學說明：商品瀏覽應該公開，讓訪客可以瀏覽商品
+   * 只有加入購物車等操作才需要登入
    */
   {
     path: 'products',
-    canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -86,12 +87,11 @@ export const routes: Routes = [
   },
 
   /**
-   * 分類路由
-   * Categories route
+   * 分類路由（公開訪問）
+   * Categories route (public access)
    */
   {
     path: 'categories',
-    canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -196,9 +196,11 @@ export const routes: Routes = [
   /**
    * 404 頁面
    * 404 page
+   *
+   * 教學說明：找不到頁面時導向首頁，而不是登入頁
    */
   {
     path: '**',
-    redirectTo: '/auth/login',
+    redirectTo: '/home',
   },
 ];
