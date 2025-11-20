@@ -31,6 +31,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatListModule } from '@angular/material/list';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatDividerModule } from '@angular/material/divider';
 
 // 服務和模型
 import { ProductService } from '../../services/product.service';
@@ -63,6 +66,9 @@ import { CurrencyFormatPipe, TruncatePipe } from '@shared/pipes';
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    MatListModule,
+    MatBadgeModule,
+    MatDividerModule,
     // 共用
     CurrencyFormatPipe,
     TruncatePipe,
@@ -114,6 +120,28 @@ export class ProductListComponent implements OnInit {
    * Sort order control
    */
   public readonly sortOrderControl = new FormControl<'asc' | 'desc'>('desc');
+
+  /**
+   * 選中的分類
+   * Selected category
+   */
+  public readonly selectedCategory = signal<string | null>(null);
+
+  /**
+   * 分類列表
+   * Category list
+   */
+  public readonly categories = signal([
+    { name: '全部商品', slug: null, icon: 'apps', count: 30 },
+    { name: '智慧型手機', slug: 'smartphones', icon: 'smartphone', count: 6 },
+    { name: '筆記型電腦', slug: 'laptops', icon: 'laptop', count: 5 },
+    { name: '耳機音響', slug: 'audio', icon: 'headphones', count: 4 },
+    { name: '平板電腦', slug: 'tablets', icon: 'tablet', count: 3 },
+    { name: '智慧手錶', slug: 'smartwatches', icon: 'watch', count: 3 },
+    { name: '相機攝影', slug: 'cameras', icon: 'camera_alt', count: 3 },
+    { name: '遊戲主機', slug: 'gaming', icon: 'sports_esports', count: 3 },
+    { name: '智慧家居', slug: 'smart-home', icon: 'home', count: 3 },
+  ]);
 
   /**
    * 分頁資訊
@@ -185,6 +213,7 @@ export class ProductListComponent implements OnInit {
       sortBy: this.sortControl.value || undefined,
       sortOrder: this.sortOrderControl.value || undefined,
       status: 'active', // 只顯示上架中的商品
+      categorySlug: this.selectedCategory() || undefined,
     };
 
     this.productService
@@ -205,6 +234,16 @@ export class ProductListComponent implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  /**
+   * 選擇分類
+   * Select category
+   */
+  selectCategory(categorySlug: string | null): void {
+    this.selectedCategory.set(categorySlug);
+    this.pagination.update((current) => ({ ...current, page: 1 })); // 重置到第一頁
+    this.loadProducts();
   }
 
   /**

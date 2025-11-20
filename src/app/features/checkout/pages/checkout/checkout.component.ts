@@ -36,6 +36,7 @@ import { OrderService } from '@features/order/services/order.service';
 import { PaymentService } from '@core/services/payment.service';
 import { NotificationService } from '@core/services/notification.service';
 import { LoggerService } from '@core/services';
+import { AddressService } from '@core/services/address.service';
 
 // Models
 import { CreateOrderRequest, OrderAddress } from '@core/models/order.model';
@@ -78,6 +79,7 @@ export class CheckoutComponent implements OnInit {
   private readonly paymentService = inject(PaymentService);
   private readonly notificationService = inject(NotificationService);
   private readonly logger = inject(LoggerService);
+  private readonly addressService = inject(AddressService);
 
   /**
    * 購物車項目 Signal
@@ -185,6 +187,45 @@ export class CheckoutComponent implements OnInit {
       paymentMethodId: [1, Validators.required],
       customerNote: [''],
     });
+
+    // 自動填入用戶預設地址
+    this.autoFillDefaultAddress();
+  }
+
+  /**
+   * 自動填入預設地址
+   * Auto-fill default address
+   */
+  private autoFillDefaultAddress(): void {
+    this.addressService
+      .getDefaultAddress()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (address) => {
+          if (address) {
+            this.logger.info('[Checkout] Auto-filling default address:', address);
+
+            // 移除手機號碼中的破折號（09-1234-5678 -> 0912345678）
+            const phoneNumber = address.recipientPhone.replace(/-/g, '');
+
+            this.shippingForm.patchValue({
+              recipientName: address.recipientName,
+              recipientPhone: phoneNumber,
+              postalCode: address.postalCode,
+              city: address.city,
+              district: address.district,
+              streetAddress: address.streetAddress,
+              buildingFloor: address.buildingFloor || '',
+            });
+
+            this.notificationService.info('已自動填入您的預設地址');
+          }
+        },
+        error: (error) => {
+          this.logger.error('[Checkout] Failed to load default address:', error);
+          // 不顯示錯誤訊息，讓用戶手動填寫即可
+        },
+      });
   }
 
   /**
